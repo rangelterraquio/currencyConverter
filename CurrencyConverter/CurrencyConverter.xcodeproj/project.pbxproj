@@ -9,13 +9,32 @@
 /* Begin PBXBuildFile section */
 		70335424263DA92F000C67D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335423263DA92F000C67D9 /* AppDelegate.swift */; };
 		70335426263DA92F000C67D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335425263DA92F000C67D9 /* SceneDelegate.swift */; };
-		70335428263DA92F000C67D9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335427263DA92F000C67D9 /* ViewController.swift */; };
-		7033542B263DA92F000C67D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70335429263DA92F000C67D9 /* Main.storyboard */; };
+		70335428263DA92F000C67D9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335427263DA92F000C67D9 /* HomeViewController.swift */; };
 		7033542E263DA92F000C67D9 /* CurrencyConverter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7033542C263DA92F000C67D9 /* CurrencyConverter.xcdatamodeld */; };
 		70335430263DA932000C67D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7033542F263DA932000C67D9 /* Assets.xcassets */; };
 		70335433263DA932000C67D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70335431263DA932000C67D9 /* LaunchScreen.storyboard */; };
 		7033543E263DA932000C67D9 /* CurrencyConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033543D263DA932000C67D9 /* CurrencyConverterTests.swift */; };
 		70335449263DA932000C67D9 /* CurrencyConverterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335448263DA932000C67D9 /* CurrencyConverterUITests.swift */; };
+		7033545B263DAB98000C67D9 /* NetworkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033545A263DAB98000C67D9 /* NetworkTarget.swift */; };
+		70335463263DACE3000C67D9 /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335462263DACE3000C67D9 /* NetworkConstants.swift */; };
+		70335468263DAEA9000C67D9 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335467263DAEA9000C67D9 /* NetworkService.swift */; };
+		7033546E263DB435000C67D9 /* Docadable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033546D263DB435000C67D9 /* Docadable+Extension.swift */; };
+		70335477263DB82F000C67D9 /* CurrencyTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335476263DB82F000C67D9 /* CurrencyTarget.swift */; };
+		7033547C263DBCE8000C67D9 /* CurrencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033547B263DBCE8000C67D9 /* CurrencyService.swift */; };
+		70335482263E231F000C67D9 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335481263E231F000C67D9 /* Currency.swift */; };
+		7033548B263E429C000C67D9 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033548A263E429C000C67D9 /* Coordinator.swift */; };
+		70335493263E42CD000C67D9 /* CoordinatorOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335492263E42CD000C67D9 /* CoordinatorOutput.swift */; };
+		70335498263E42E1000C67D9 /* Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335497263E42E1000C67D9 /* Presentable.swift */; };
+		7033549E263E4332000C67D9 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033549D263E4332000C67D9 /* BaseCoordinator.swift */; };
+		703354A4263E436C000C67D9 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703354A3263E436C000C67D9 /* Router.swift */; };
+		703354A9263E43DA000C67D9 /* RouterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703354A8263E43DA000C67D9 /* RouterProtocol.swift */; };
+		703354AF263E45F2000C67D9 /* CoordinatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703354AE263E45F2000C67D9 /* CoordinatorFactory.swift */; };
+		703354B6263E464B000C67D9 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703354B5263E464B000C67D9 /* HomeCoordinator.swift */; };
+		703354BC263E4687000C67D9 /* HomeModuleFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703354BB263E4687000C67D9 /* HomeModuleFactory.swift */; };
+		703354C4263E46DB000C67D9 /* ModuleFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703354C3263E46DB000C67D9 /* ModuleFactory.swift */; };
+		705A921F263EE84600D9FC95 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A921E263EE84600D9FC95 /* AppCoordinator.swift */; };
+		705A9226263EE9A500D9FC95 /* ViewCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9225263EE9A500D9FC95 /* ViewCoding.swift */; };
+		705A9232263EED9600D9FC95 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9231263EED9600D9FC95 /* UIView+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +58,7 @@
 		70335420263DA92F000C67D9 /* CurrencyConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrencyConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70335423263DA92F000C67D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70335425263DA92F000C67D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		70335427263DA92F000C67D9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		7033542A263DA92F000C67D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		70335427263DA92F000C67D9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		7033542D263DA92F000C67D9 /* CurrencyConverter.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CurrencyConverter.xcdatamodel; sourceTree = "<group>"; };
 		7033542F263DA932000C67D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		70335432263DA932000C67D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -51,6 +69,26 @@
 		70335444263DA932000C67D9 /* CurrencyConverterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CurrencyConverterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		70335448263DA932000C67D9 /* CurrencyConverterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverterUITests.swift; sourceTree = "<group>"; };
 		7033544A263DA932000C67D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7033545A263DAB98000C67D9 /* NetworkTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTarget.swift; sourceTree = "<group>"; };
+		70335462263DACE3000C67D9 /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
+		70335467263DAEA9000C67D9 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		7033546D263DB435000C67D9 /* Docadable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Docadable+Extension.swift"; sourceTree = "<group>"; };
+		70335476263DB82F000C67D9 /* CurrencyTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTarget.swift; sourceTree = "<group>"; };
+		7033547B263DBCE8000C67D9 /* CurrencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyService.swift; sourceTree = "<group>"; };
+		70335481263E231F000C67D9 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		7033548A263E429C000C67D9 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		70335492263E42CD000C67D9 /* CoordinatorOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorOutput.swift; sourceTree = "<group>"; };
+		70335497263E42E1000C67D9 /* Presentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presentable.swift; sourceTree = "<group>"; };
+		7033549D263E4332000C67D9 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
+		703354A3263E436C000C67D9 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		703354A8263E43DA000C67D9 /* RouterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterProtocol.swift; sourceTree = "<group>"; };
+		703354AE263E45F2000C67D9 /* CoordinatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFactory.swift; sourceTree = "<group>"; };
+		703354B5263E464B000C67D9 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		703354BB263E4687000C67D9 /* HomeModuleFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModuleFactory.swift; sourceTree = "<group>"; };
+		703354C3263E46DB000C67D9 /* ModuleFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleFactory.swift; sourceTree = "<group>"; };
+		705A921E263EE84600D9FC95 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		705A9225263EE9A500D9FC95 /* ViewCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCoding.swift; sourceTree = "<group>"; };
+		705A9231263EED9600D9FC95 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,10 +139,13 @@
 		70335422263DA92F000C67D9 /* CurrencyConverter */ = {
 			isa = PBXGroup;
 			children = (
-				70335423263DA92F000C67D9 /* AppDelegate.swift */,
-				70335425263DA92F000C67D9 /* SceneDelegate.swift */,
-				70335427263DA92F000C67D9 /* ViewController.swift */,
-				70335429263DA92F000C67D9 /* Main.storyboard */,
+				705A922D263EE9BC00D9FC95 /* Commom */,
+				705A9223263EE8C900D9FC95 /* Application */,
+				703354B3263E4630000C67D9 /* FLows */,
+				70335489263E4285000C67D9 /* Coordinator */,
+				70335480263E22FA000C67D9 /* Models */,
+				7033546C263DB40F000C67D9 /* Extensions */,
+				70335459263DA9B6000C67D9 /* Networking */,
 				7033542F263DA932000C67D9 /* Assets.xcassets */,
 				70335431263DA932000C67D9 /* LaunchScreen.storyboard */,
 				70335434263DA932000C67D9 /* Info.plist */,
@@ -129,6 +170,126 @@
 				7033544A263DA932000C67D9 /* Info.plist */,
 			);
 			path = CurrencyConverterUITests;
+			sourceTree = "<group>";
+		};
+		70335459263DA9B6000C67D9 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				70335475263DB7F9000C67D9 /* Converter */,
+				7033545A263DAB98000C67D9 /* NetworkTarget.swift */,
+				70335462263DACE3000C67D9 /* NetworkConstants.swift */,
+				70335467263DAEA9000C67D9 /* NetworkService.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		7033546C263DB40F000C67D9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7033546D263DB435000C67D9 /* Docadable+Extension.swift */,
+				705A9231263EED9600D9FC95 /* UIView+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		70335475263DB7F9000C67D9 /* Converter */ = {
+			isa = PBXGroup;
+			children = (
+				70335476263DB82F000C67D9 /* CurrencyTarget.swift */,
+				7033547B263DBCE8000C67D9 /* CurrencyService.swift */,
+			);
+			path = Converter;
+			sourceTree = "<group>";
+		};
+		70335480263E22FA000C67D9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				70335481263E231F000C67D9 /* Currency.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		70335489263E4285000C67D9 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				705A9224263EE8E200D9FC95 /* Protocols */,
+				703354AD263E44E0000C67D9 /* Factories */,
+				703354A2263E435C000C67D9 /* Router */,
+				7033549C263E431F000C67D9 /* Parents */,
+				705A921E263EE84600D9FC95 /* AppCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		7033549C263E431F000C67D9 /* Parents */ = {
+			isa = PBXGroup;
+			children = (
+				7033549D263E4332000C67D9 /* BaseCoordinator.swift */,
+			);
+			path = Parents;
+			sourceTree = "<group>";
+		};
+		703354A2263E435C000C67D9 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				703354A3263E436C000C67D9 /* Router.swift */,
+				703354A8263E43DA000C67D9 /* RouterProtocol.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		703354AD263E44E0000C67D9 /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+				703354BB263E4687000C67D9 /* HomeModuleFactory.swift */,
+				703354AE263E45F2000C67D9 /* CoordinatorFactory.swift */,
+				703354C3263E46DB000C67D9 /* ModuleFactory.swift */,
+			);
+			path = Factories;
+			sourceTree = "<group>";
+		};
+		703354B3263E4630000C67D9 /* FLows */ = {
+			isa = PBXGroup;
+			children = (
+				703354B4263E463A000C67D9 /* HomeFlow */,
+			);
+			path = FLows;
+			sourceTree = "<group>";
+		};
+		703354B4263E463A000C67D9 /* HomeFlow */ = {
+			isa = PBXGroup;
+			children = (
+				70335427263DA92F000C67D9 /* HomeViewController.swift */,
+				703354B5263E464B000C67D9 /* HomeCoordinator.swift */,
+			);
+			path = HomeFlow;
+			sourceTree = "<group>";
+		};
+		705A9223263EE8C900D9FC95 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				70335423263DA92F000C67D9 /* AppDelegate.swift */,
+				70335425263DA92F000C67D9 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		705A9224263EE8E200D9FC95 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				70335497263E42E1000C67D9 /* Presentable.swift */,
+				7033548A263E429C000C67D9 /* Coordinator.swift */,
+				70335492263E42CD000C67D9 /* CoordinatorOutput.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		705A922D263EE9BC00D9FC95 /* Commom */ = {
+			isa = PBXGroup;
+			children = (
+				705A9225263EE9A500D9FC95 /* ViewCoding.swift */,
+			);
+			path = Commom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,7 +397,6 @@
 			files = (
 				70335433263DA932000C67D9 /* LaunchScreen.storyboard in Resources */,
 				70335430263DA932000C67D9 /* Assets.xcassets in Resources */,
-				7033542B263DA92F000C67D9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,10 +421,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70335428263DA92F000C67D9 /* ViewController.swift in Sources */,
+				705A921F263EE84600D9FC95 /* AppCoordinator.swift in Sources */,
+				7033547C263DBCE8000C67D9 /* CurrencyService.swift in Sources */,
+				703354BC263E4687000C67D9 /* HomeModuleFactory.swift in Sources */,
+				70335463263DACE3000C67D9 /* NetworkConstants.swift in Sources */,
+				70335428263DA92F000C67D9 /* HomeViewController.swift in Sources */,
 				7033542E263DA92F000C67D9 /* CurrencyConverter.xcdatamodeld in Sources */,
+				70335477263DB82F000C67D9 /* CurrencyTarget.swift in Sources */,
+				70335493263E42CD000C67D9 /* CoordinatorOutput.swift in Sources */,
+				7033546E263DB435000C67D9 /* Docadable+Extension.swift in Sources */,
+				70335482263E231F000C67D9 /* Currency.swift in Sources */,
+				703354A4263E436C000C67D9 /* Router.swift in Sources */,
+				705A9226263EE9A500D9FC95 /* ViewCoding.swift in Sources */,
+				703354A9263E43DA000C67D9 /* RouterProtocol.swift in Sources */,
 				70335424263DA92F000C67D9 /* AppDelegate.swift in Sources */,
+				7033548B263E429C000C67D9 /* Coordinator.swift in Sources */,
+				703354C4263E46DB000C67D9 /* ModuleFactory.swift in Sources */,
+				7033549E263E4332000C67D9 /* BaseCoordinator.swift in Sources */,
 				70335426263DA92F000C67D9 /* SceneDelegate.swift in Sources */,
+				705A9232263EED9600D9FC95 /* UIView+Extension.swift in Sources */,
+				7033545B263DAB98000C67D9 /* NetworkTarget.swift in Sources */,
+				703354AF263E45F2000C67D9 /* CoordinatorFactory.swift in Sources */,
+				70335468263DAEA9000C67D9 /* NetworkService.swift in Sources */,
+				70335498263E42E1000C67D9 /* Presentable.swift in Sources */,
+				703354B6263E464B000C67D9 /* HomeCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,14 +480,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		70335429263DA92F000C67D9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7033542A263DA92F000C67D9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		70335431263DA932000C67D9 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
