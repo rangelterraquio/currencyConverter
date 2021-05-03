@@ -36,7 +36,8 @@ extension NetworkService {
             }
 
             guard let data = responseData else { return }
-          
+            let s = String(data: data, encoding: .utf8)
+            print(s)
             let result = try? T.decode(from: data)
             complete(.success(result))
         }.resume()

@@ -35,6 +35,15 @@
 		705A921F263EE84600D9FC95 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A921E263EE84600D9FC95 /* AppCoordinator.swift */; };
 		705A9226263EE9A500D9FC95 /* ViewCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9225263EE9A500D9FC95 /* ViewCoding.swift */; };
 		705A9232263EED9600D9FC95 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9231263EED9600D9FC95 /* UIView+Extension.swift */; };
+		705A923E263EF33A00D9FC95 /* SelectCurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A923D263EF33A00D9FC95 /* SelectCurrencyViewController.swift */; };
+		705A9243263EF5BA00D9FC95 /* SelectCurrencyModuleFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9242263EF5BA00D9FC95 /* SelectCurrencyModuleFactory.swift */; };
+		705A9248263EFDEC00D9FC95 /* HomeConvertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9247263EFDEC00D9FC95 /* HomeConvertViewModel.swift */; };
+		705A924D263F014B00D9FC95 /* ConversionResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A924C263F014B00D9FC95 /* ConversionResponseModel.swift */; };
+		705A9252263F3D7A00D9FC95 /* SelectCurrencyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9251263F3D7A00D9FC95 /* SelectCurrencyDelegate.swift */; };
+		705A9257263F427D00D9FC95 /* SelectCurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9256263F427D00D9FC95 /* SelectCurrencyTableViewCell.swift */; };
+		705A925F263F4A2600D9FC95 /* SelectCurrencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A925E263F4A2600D9FC95 /* SelectCurrencyViewModel.swift */; };
+		705A9265263F62D700D9FC95 /* CCButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9264263F62D700D9FC95 /* CCButton.swift */; };
+		705A926D263F6D0400D9FC95 /* CCSelectionCurrencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A926C263F6D0400D9FC95 /* CCSelectionCurrencyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +98,15 @@
 		705A921E263EE84600D9FC95 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		705A9225263EE9A500D9FC95 /* ViewCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCoding.swift; sourceTree = "<group>"; };
 		705A9231263EED9600D9FC95 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		705A923D263EF33A00D9FC95 /* SelectCurrencyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyViewController.swift; sourceTree = "<group>"; };
+		705A9242263EF5BA00D9FC95 /* SelectCurrencyModuleFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyModuleFactory.swift; sourceTree = "<group>"; };
+		705A9247263EFDEC00D9FC95 /* HomeConvertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConvertViewModel.swift; sourceTree = "<group>"; };
+		705A924C263F014B00D9FC95 /* ConversionResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionResponseModel.swift; sourceTree = "<group>"; };
+		705A9251263F3D7A00D9FC95 /* SelectCurrencyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyDelegate.swift; sourceTree = "<group>"; };
+		705A9256263F427D00D9FC95 /* SelectCurrencyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyTableViewCell.swift; sourceTree = "<group>"; };
+		705A925E263F4A2600D9FC95 /* SelectCurrencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyViewModel.swift; sourceTree = "<group>"; };
+		705A9264263F62D700D9FC95 /* CCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCButton.swift; sourceTree = "<group>"; };
+		705A926C263F6D0400D9FC95 /* CCSelectionCurrencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCSelectionCurrencyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +157,7 @@
 		70335422263DA92F000C67D9 /* CurrencyConverter */ = {
 			isa = PBXGroup;
 			children = (
+				705A9263263F62BB00D9FC95 /* Components */,
 				705A922D263EE9BC00D9FC95 /* Commom */,
 				705A9223263EE8C900D9FC95 /* Application */,
 				703354B3263E4630000C67D9 /* FLows */,
@@ -205,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				70335481263E231F000C67D9 /* Currency.swift */,
+				705A924C263F014B00D9FC95 /* ConversionResponseModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -244,6 +264,7 @@
 				703354BB263E4687000C67D9 /* HomeModuleFactory.swift */,
 				703354AE263E45F2000C67D9 /* CoordinatorFactory.swift */,
 				703354C3263E46DB000C67D9 /* ModuleFactory.swift */,
+				705A9242263EF5BA00D9FC95 /* SelectCurrencyModuleFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -251,6 +272,7 @@
 		703354B3263E4630000C67D9 /* FLows */ = {
 			isa = PBXGroup;
 			children = (
+				705A923C263EF31600D9FC95 /* SelectCurrency */,
 				703354B4263E463A000C67D9 /* HomeFlow */,
 			);
 			path = FLows;
@@ -261,6 +283,7 @@
 			children = (
 				70335427263DA92F000C67D9 /* HomeViewController.swift */,
 				703354B5263E464B000C67D9 /* HomeCoordinator.swift */,
+				705A9247263EFDEC00D9FC95 /* HomeConvertViewModel.swift */,
 			);
 			path = HomeFlow;
 			sourceTree = "<group>";
@@ -290,6 +313,26 @@
 				705A9225263EE9A500D9FC95 /* ViewCoding.swift */,
 			);
 			path = Commom;
+			sourceTree = "<group>";
+		};
+		705A923C263EF31600D9FC95 /* SelectCurrency */ = {
+			isa = PBXGroup;
+			children = (
+				705A9256263F427D00D9FC95 /* SelectCurrencyTableViewCell.swift */,
+				705A923D263EF33A00D9FC95 /* SelectCurrencyViewController.swift */,
+				705A9251263F3D7A00D9FC95 /* SelectCurrencyDelegate.swift */,
+				705A925E263F4A2600D9FC95 /* SelectCurrencyViewModel.swift */,
+			);
+			path = SelectCurrency;
+			sourceTree = "<group>";
+		};
+		705A9263263F62BB00D9FC95 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				705A9264263F62D700D9FC95 /* CCButton.swift */,
+				705A926C263F6D0400D9FC95 /* CCSelectionCurrencyView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -421,7 +464,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				705A9252263F3D7A00D9FC95 /* SelectCurrencyDelegate.swift in Sources */,
+				705A925F263F4A2600D9FC95 /* SelectCurrencyViewModel.swift in Sources */,
 				705A921F263EE84600D9FC95 /* AppCoordinator.swift in Sources */,
+				705A9243263EF5BA00D9FC95 /* SelectCurrencyModuleFactory.swift in Sources */,
 				7033547C263DBCE8000C67D9 /* CurrencyService.swift in Sources */,
 				703354BC263E4687000C67D9 /* HomeModuleFactory.swift in Sources */,
 				70335463263DACE3000C67D9 /* NetworkConstants.swift in Sources */,
@@ -429,21 +475,27 @@
 				7033542E263DA92F000C67D9 /* CurrencyConverter.xcdatamodeld in Sources */,
 				70335477263DB82F000C67D9 /* CurrencyTarget.swift in Sources */,
 				70335493263E42CD000C67D9 /* CoordinatorOutput.swift in Sources */,
+				705A9265263F62D700D9FC95 /* CCButton.swift in Sources */,
 				7033546E263DB435000C67D9 /* Docadable+Extension.swift in Sources */,
 				70335482263E231F000C67D9 /* Currency.swift in Sources */,
 				703354A4263E436C000C67D9 /* Router.swift in Sources */,
 				705A9226263EE9A500D9FC95 /* ViewCoding.swift in Sources */,
+				705A9257263F427D00D9FC95 /* SelectCurrencyTableViewCell.swift in Sources */,
 				703354A9263E43DA000C67D9 /* RouterProtocol.swift in Sources */,
 				70335424263DA92F000C67D9 /* AppDelegate.swift in Sources */,
+				705A9248263EFDEC00D9FC95 /* HomeConvertViewModel.swift in Sources */,
 				7033548B263E429C000C67D9 /* Coordinator.swift in Sources */,
 				703354C4263E46DB000C67D9 /* ModuleFactory.swift in Sources */,
 				7033549E263E4332000C67D9 /* BaseCoordinator.swift in Sources */,
 				70335426263DA92F000C67D9 /* SceneDelegate.swift in Sources */,
 				705A9232263EED9600D9FC95 /* UIView+Extension.swift in Sources */,
 				7033545B263DAB98000C67D9 /* NetworkTarget.swift in Sources */,
+				705A923E263EF33A00D9FC95 /* SelectCurrencyViewController.swift in Sources */,
 				703354AF263E45F2000C67D9 /* CoordinatorFactory.swift in Sources */,
 				70335468263DAEA9000C67D9 /* NetworkService.swift in Sources */,
 				70335498263E42E1000C67D9 /* Presentable.swift in Sources */,
+				705A926D263F6D0400D9FC95 /* CCSelectionCurrencyView.swift in Sources */,
+				705A924D263F014B00D9FC95 /* ConversionResponseModel.swift in Sources */,
 				703354B6263E464B000C67D9 /* HomeCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

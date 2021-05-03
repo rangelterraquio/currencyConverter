@@ -9,15 +9,15 @@ import Foundation
 
 
 enum CurrencyTarget {
-    case convert(value: Float, from: CurrenciesResponseModel, to: CurrenciesResponseModel)
+    case convert(value: Float, from: Currency, to: Currency)
     case list
 }
 
 extension CurrencyTarget: NetworkTarget {
     var path: String {
         switch self {
-        case .convert(let value,let from, let to):
-            return ""
+        case .convert:
+            return "live"
         case .list:
             return "list"
         }
@@ -31,14 +31,18 @@ extension CurrencyTarget: NetworkTarget {
             return .get
         }
     }
-    
+//    & from = USD
+//        & to = GBP
+//        & amount = 10
     
     var header: [String : String]? {
+        var hearder: [String: String] = [:]
+        hearder["access_key"] = NetworkConstants.api_key
+        
         switch self {
         case .convert:
-            return [:]
+            return hearder
         case .list:
-            var hearder: [String: String] = [:]
             hearder["access_key"] = NetworkConstants.api_key
             return hearder
         }

@@ -13,7 +13,8 @@ final class HomeCoordinator: BaseCoordinator {
   private let factory: HomeModuleFactory
   private let router: Router
   
-    
+  private weak var homeHandler: SelectCurrencyDelegate?
+  
   //MARK:  -> Initialize
   
   /// - Parameters:
@@ -31,7 +32,22 @@ final class HomeCoordinator: BaseCoordinator {
     /// Show home module
   private func showHome() {
     let homeHandler = factory.makeHomeHandler()
+    self.homeHandler = homeHandler
+    homeHandler.didTapSelectionCurrencyButton = { source in
+        self.showSelectionCurrencyView(source: source)
+    }
     router.setRootModule(homeHandler)
   }
+    
+    private func showSelectionCurrencyView(source: SelectCurrencyViewController.CurrencySource) {
+        let vc = factory.makeSelectCurrencyHandler(selection: source)
+        vc.delegate = homeHandler
+        
+        vc.didTapInConfirmButton =  {
+            self.router.popModule(animated: true)
+        }
+        
+        router.push(vc, animated: true)
+    }
   
 }

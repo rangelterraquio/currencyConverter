@@ -9,14 +9,18 @@ import Foundation
 
 protocol CurrencyServiceProtocol: NetworkService {
  
-    func convert(value: Float, from: CurrenciesResponseModel, to: CurrenciesResponseModel, handle: @escaping ServiceCompletion<Void>)
+    func convert(value: Float, from: Currency, to: Currency, handle: @escaping ServiceCompletion<ConversionResponseModel>)
     func list(handle: @escaping ServiceCompletion<CurrenciesResponseModel>)
 }
 
 class CurrencyService: CurrencyServiceProtocol {
     typealias Target = CurrencyTarget
     
-    func convert(value: Float, from: CurrenciesResponseModel, to: CurrenciesResponseModel, handle: @escaping ServiceCompletion<Void>) {
+    func convert(value: Float,
+                 from: Currency,
+                 to: Currency,
+                 handle: @escaping ServiceCompletion<ConversionResponseModel>) {
+        
         request(target: .convert(value: value, from: from, to: to), then: handle)
     }
     

@@ -8,12 +8,12 @@
 import Foundation
 
 /// Factory for coordinators
-final class CoordinatorFactory{
+final class CoordinatorFactory {
     
     /// Method to create Home Coordinator
     /// - Parameter router: Router
     /// - Returns: HomeCoordinator
-    func makeHomeCoordinator(_ router: Router) -> HomeCoordinator{
+    func makeHomeCoordinator(_ router: Router) -> HomeCoordinator {
         return HomeCoordinator(router: router, factory: ModuleFactory())
     }
 }
