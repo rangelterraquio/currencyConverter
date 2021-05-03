@@ -29,6 +29,13 @@ class SelectCurrencyViewController: UIViewController {
         return button
     }()
     
+    private lazy var filterButton: UIBarButtonItem = {
+          let imgFilter = UIImage(systemName: "slider.horizontal.3")?.withRenderingMode(.alwaysOriginal)
+          let filterItem = UIBarButtonItem(image: imgFilter, style: .plain, target: self, action: #selector(didTapFilterButton))
+        filterItem.isEnabled = true
+          return filterItem
+      }()
+    
     private let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.isHidden = true
@@ -75,6 +82,39 @@ class SelectCurrencyViewController: UIViewController {
         didTapInConfirmButton?()
     }
     
+    @objc
+    private func didTapFilterButton() {
+        showFilterActionSheet()
+    }
+    
+    private func showFilterActionSheet() {
+        let actionSheet: UIAlertController = UIAlertController(title: "Select a Filter", message: "", preferredStyle: .actionSheet)
+        
+        let cancelActionButton = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            actionSheet.dismiss(animated: true, completion: nil)
+        }
+        
+        let byNameAction = UIAlertAction(title: "By Name", style: .default) { [weak self] _ in
+            self?.selectCurrencyViewModel.filterList(by: .byName)
+        }
+        
+        let byCodeAction = UIAlertAction(title: "By Code", style: .default) { [weak self] _ in
+            self?.selectCurrencyViewModel.filterList(by: .byCode)
+        }
+        
+        let noneAction = UIAlertAction(title: "None", style: .default) { [weak self] _ in
+            self?.selectCurrencyViewModel.filterList(by: .none)
+        }
+        
+        actionSheet.addAction(byCodeAction)
+        actionSheet.addAction(byNameAction)
+        actionSheet.addAction(noneAction)
+        actionSheet.addAction(cancelActionButton)
+        
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    
 }
 
 
@@ -116,9 +156,16 @@ extension SelectCurrencyViewController: ViewCoding {
                 self.tableView.reloadData()
             }
         }
-        
-        
+      
+        selectCurrencyViewModel.bindLoadingState = {
+            self.activityIndicator.isHidden = false
+            self.activityIndicator.startAnimating()
+            self.confirmButton.isHidden = true
+            self.tableView.isHidden = true
+        }
         confirmButton.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
+        
+        navigationItem.setRightBarButton(filterButton, animated: true)
     }
 }
 

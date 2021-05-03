@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import CoreData
 //{
 //    "success": true,
 //    "terms": "https://currencylayer.com/terms",
@@ -22,23 +22,45 @@ import Foundation
 //}
 
 //
-struct Currency: Decodable {
+class Currency: NSManagedObject {
     
-    let currencyCode: String
-    let currencyName: String
-    
-    init(code: String, name: String) {
+    convenience init(code: String, name: String) {
+        
+        guard let entity = NSEntityDescription.entity(forEntityName: "Currency", in: DataManager.shared.context) else {  fatalError("Failed to decode Subject!")  }
+
+        self.init(entity: entity, insertInto: nil)
         self.currencyCode = code
         self.currencyName = name
     }
 }
+//
+//extension Currency {
+//    @nonobjc public class func fetchRequest() -> NSFetchRequest<Currency> {
+//        return NSFetchRequest<Currency>(entityName: "Currency")
+//    }
+//
+//    @NSManaged public var currencyCode: String
+//    @NSManaged public var currencyName: String
+//}
 
-extension Currency: Equatable {
-    static func ==(lhs: Currency, rhs: Currency) -> Bool {
-        return lhs.currencyCode == rhs.currencyCode && lhs.currencyName == rhs.currencyName
-    }
-}
+//extension Currency: Equatable {
+//    static func ==(lhs: Currency, rhs: Currency) -> Bool {
+//        return lhs.currencyCode == rhs.currencyCode && lhs.currencyName == rhs.currencyName
+//    }
+//}
 
+
+//extension Currency {
+////
+////    @NSManaged public var currencyCode: String
+////    @NSManaged public var currencyName: String
+//////
+//    convenience init(code: String, name: String) {
+//        self.init()
+//        self.currencyCode = code
+//        self.currencyName = name
+//    }
+//}
 
 
 struct CurrenciesResponseModel: Codable {

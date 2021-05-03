@@ -15,31 +15,60 @@ class HomeConvertViewModel: NSObject {
     
     public var bindValidatedInputs: ((Bool)->Void)?
     
-    init(service: CurrencyService = CurrencyService()) {
-        currencyService = service
+    private let dataManager: DataManager
+    
+    init(service: CurrencyService = CurrencyService(), dataManager: DataManager = DataManager.shared) {
+        self.currencyService = service
+        self.dataManager = dataManager
     }
     
     func convert(from: Currency, to: Currency, value: Float) {
+        
         currencyService.convert(value: value, from: from, to: to) { [weak self] (result) in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let model):
-                if let response = model, let quotes = response.quotes, let self = self {
+                if let response = model, let quotes = response.quotes {
                     let text = self.convertAndFormatText(value: value, from: from, to: to, quotes: quotes)
                     self.bindResultConversionModel?(text)
+                    self.dataManager.insert(with: quotes, completion: nil)
                 }
-                
-            case .error(let error):
+            case .error(_):
+                self.handleConversionOffiline(value: value, from: from, to: to)
                 break
             }
         }
     }
     
+    private func handleConversionOffiline(value: Float, from: Currency, to: Currency) {
+        dataManager.fetch(entity: Quotes.self) { (model, error) in
+            if let _ = error {
+                //TODO Error
+                return
+            }
+            guard let model = model?.first, let quotes: [String: Float] = try? model.quotes?.decoded() else {
+                return
+            }
+            let text = self.convertAndFormatText(value: value, from: from, to: to, quotes: quotes)
+            self.bindResultConversionModel?(text)
+            
+        }
+    }
+    
+    
+    
     private func convertAndFormatText(value: Float, from: Currency, to: Currency, quotes: [String : Float]) -> String {
-        let amountInDolar = (quotes["USD\(from.currencyCode)"] ?? 1) / value
         
-        let conversion = (quotes["USD\(to.currencyCode)"] ?? 1) / amountInDolar
+        guard let fromCode = from.currencyCode, let toCode = to.currencyCode else {
+            //TODO
+            return ""
+        }
+        let amountInDolar = (quotes["USD\(fromCode)"] ?? 1) / value
         
-        return "\(value) \(from.currencyCode) = \(String(format: "%.2f", conversion)) \(to.currencyCode)"
+        let conversion = (quotes["USD\(toCode)"] ?? 1) / amountInDolar
+        
+        return "\(value) \(fromCode) = \(String(format: "%.2f", conversion)) \(toCode)"
     }
     
     func validateInputs(from: Currency?, to: Currency?, value: String?) {

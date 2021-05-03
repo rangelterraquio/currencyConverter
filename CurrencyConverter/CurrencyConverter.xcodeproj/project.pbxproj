@@ -18,7 +18,7 @@
 		7033545B263DAB98000C67D9 /* NetworkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033545A263DAB98000C67D9 /* NetworkTarget.swift */; };
 		70335463263DACE3000C67D9 /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335462263DACE3000C67D9 /* NetworkConstants.swift */; };
 		70335468263DAEA9000C67D9 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335467263DAEA9000C67D9 /* NetworkService.swift */; };
-		7033546E263DB435000C67D9 /* Docadable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033546D263DB435000C67D9 /* Docadable+Extension.swift */; };
+		7033546E263DB435000C67D9 /* Codable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033546D263DB435000C67D9 /* Codable+Extension.swift */; };
 		70335477263DB82F000C67D9 /* CurrencyTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335476263DB82F000C67D9 /* CurrencyTarget.swift */; };
 		7033547C263DBCE8000C67D9 /* CurrencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033547B263DBCE8000C67D9 /* CurrencyService.swift */; };
 		70335482263E231F000C67D9 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335481263E231F000C67D9 /* Currency.swift */; };
@@ -44,6 +44,11 @@
 		705A925F263F4A2600D9FC95 /* SelectCurrencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A925E263F4A2600D9FC95 /* SelectCurrencyViewModel.swift */; };
 		705A9265263F62D700D9FC95 /* CCButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9264263F62D700D9FC95 /* CCButton.swift */; };
 		705A926D263F6D0400D9FC95 /* CCSelectionCurrencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A926C263F6D0400D9FC95 /* CCSelectionCurrencyView.swift */; };
+		705A9279263F83E300D9FC95 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9278263F83E300D9FC95 /* CoreDataStack.swift */; };
+		705A9281263F86D800D9FC95 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9280263F86D800D9FC95 /* CoreDataController.swift */; };
+		705A9286263F873C00D9FC95 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705A9285263F873C00D9FC95 /* DataManager.swift */; };
+		70ED454A26403061006E4FBA /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ED454926403061006E4FBA /* Connectivity.swift */; };
+		70ED455D26403C00006E4FBA /* SelectCurrencyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ED455C26403C00006E4FBA /* SelectCurrencyFilter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +86,7 @@
 		7033545A263DAB98000C67D9 /* NetworkTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTarget.swift; sourceTree = "<group>"; };
 		70335462263DACE3000C67D9 /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		70335467263DAEA9000C67D9 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		7033546D263DB435000C67D9 /* Docadable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Docadable+Extension.swift"; sourceTree = "<group>"; };
+		7033546D263DB435000C67D9 /* Codable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Extension.swift"; sourceTree = "<group>"; };
 		70335476263DB82F000C67D9 /* CurrencyTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTarget.swift; sourceTree = "<group>"; };
 		7033547B263DBCE8000C67D9 /* CurrencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyService.swift; sourceTree = "<group>"; };
 		70335481263E231F000C67D9 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
@@ -107,6 +112,11 @@
 		705A925E263F4A2600D9FC95 /* SelectCurrencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyViewModel.swift; sourceTree = "<group>"; };
 		705A9264263F62D700D9FC95 /* CCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCButton.swift; sourceTree = "<group>"; };
 		705A926C263F6D0400D9FC95 /* CCSelectionCurrencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCSelectionCurrencyView.swift; sourceTree = "<group>"; };
+		705A9278263F83E300D9FC95 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		705A9280263F86D800D9FC95 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
+		705A9285263F873C00D9FC95 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		70ED454926403061006E4FBA /* Connectivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connectivity.swift; sourceTree = "<group>"; };
+		70ED455C26403C00006E4FBA /* SelectCurrencyFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyFilter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +147,7 @@
 		70335417263DA92E000C67D9 = {
 			isa = PBXGroup;
 			children = (
+				705A9277263F820000D9FC95 /* DataManager */,
 				70335422263DA92F000C67D9 /* CurrencyConverter */,
 				7033543C263DA932000C67D9 /* CurrencyConverterTests */,
 				70335447263DA932000C67D9 /* CurrencyConverterUITests */,
@@ -205,7 +216,7 @@
 		7033546C263DB40F000C67D9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				7033546D263DB435000C67D9 /* Docadable+Extension.swift */,
+				7033546D263DB435000C67D9 /* Codable+Extension.swift */,
 				705A9231263EED9600D9FC95 /* UIView+Extension.swift */,
 			);
 			path = Extensions;
@@ -311,6 +322,7 @@
 			isa = PBXGroup;
 			children = (
 				705A9225263EE9A500D9FC95 /* ViewCoding.swift */,
+				70ED454926403061006E4FBA /* Connectivity.swift */,
 			);
 			path = Commom;
 			sourceTree = "<group>";
@@ -322,6 +334,7 @@
 				705A923D263EF33A00D9FC95 /* SelectCurrencyViewController.swift */,
 				705A9251263F3D7A00D9FC95 /* SelectCurrencyDelegate.swift */,
 				705A925E263F4A2600D9FC95 /* SelectCurrencyViewModel.swift */,
+				70ED455C26403C00006E4FBA /* SelectCurrencyFilter.swift */,
 			);
 			path = SelectCurrency;
 			sourceTree = "<group>";
@@ -333,6 +346,16 @@
 				705A926C263F6D0400D9FC95 /* CCSelectionCurrencyView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		705A9277263F820000D9FC95 /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				705A9278263F83E300D9FC95 /* CoreDataStack.swift */,
+				705A9280263F86D800D9FC95 /* CoreDataController.swift */,
+				705A9285263F873C00D9FC95 /* DataManager.swift */,
+			);
+			path = DataManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -467,8 +490,10 @@
 				705A9252263F3D7A00D9FC95 /* SelectCurrencyDelegate.swift in Sources */,
 				705A925F263F4A2600D9FC95 /* SelectCurrencyViewModel.swift in Sources */,
 				705A921F263EE84600D9FC95 /* AppCoordinator.swift in Sources */,
+				70ED454A26403061006E4FBA /* Connectivity.swift in Sources */,
 				705A9243263EF5BA00D9FC95 /* SelectCurrencyModuleFactory.swift in Sources */,
 				7033547C263DBCE8000C67D9 /* CurrencyService.swift in Sources */,
+				70ED455D26403C00006E4FBA /* SelectCurrencyFilter.swift in Sources */,
 				703354BC263E4687000C67D9 /* HomeModuleFactory.swift in Sources */,
 				70335463263DACE3000C67D9 /* NetworkConstants.swift in Sources */,
 				70335428263DA92F000C67D9 /* HomeViewController.swift in Sources */,
@@ -476,11 +501,12 @@
 				70335477263DB82F000C67D9 /* CurrencyTarget.swift in Sources */,
 				70335493263E42CD000C67D9 /* CoordinatorOutput.swift in Sources */,
 				705A9265263F62D700D9FC95 /* CCButton.swift in Sources */,
-				7033546E263DB435000C67D9 /* Docadable+Extension.swift in Sources */,
+				7033546E263DB435000C67D9 /* Codable+Extension.swift in Sources */,
 				70335482263E231F000C67D9 /* Currency.swift in Sources */,
 				703354A4263E436C000C67D9 /* Router.swift in Sources */,
 				705A9226263EE9A500D9FC95 /* ViewCoding.swift in Sources */,
 				705A9257263F427D00D9FC95 /* SelectCurrencyTableViewCell.swift in Sources */,
+				705A9281263F86D800D9FC95 /* CoreDataController.swift in Sources */,
 				703354A9263E43DA000C67D9 /* RouterProtocol.swift in Sources */,
 				70335424263DA92F000C67D9 /* AppDelegate.swift in Sources */,
 				705A9248263EFDEC00D9FC95 /* HomeConvertViewModel.swift in Sources */,
@@ -488,11 +514,13 @@
 				703354C4263E46DB000C67D9 /* ModuleFactory.swift in Sources */,
 				7033549E263E4332000C67D9 /* BaseCoordinator.swift in Sources */,
 				70335426263DA92F000C67D9 /* SceneDelegate.swift in Sources */,
+				705A9286263F873C00D9FC95 /* DataManager.swift in Sources */,
 				705A9232263EED9600D9FC95 /* UIView+Extension.swift in Sources */,
 				7033545B263DAB98000C67D9 /* NetworkTarget.swift in Sources */,
 				705A923E263EF33A00D9FC95 /* SelectCurrencyViewController.swift in Sources */,
 				703354AF263E45F2000C67D9 /* CoordinatorFactory.swift in Sources */,
 				70335468263DAEA9000C67D9 /* NetworkService.swift in Sources */,
+				705A9279263F83E300D9FC95 /* CoreDataStack.swift in Sources */,
 				70335498263E42E1000C67D9 /* Presentable.swift in Sources */,
 				705A926D263F6D0400D9FC95 /* CCSelectionCurrencyView.swift in Sources */,
 				705A924D263F014B00D9FC95 /* ConversionResponseModel.swift in Sources */,

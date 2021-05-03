@@ -54,7 +54,8 @@ class SelectCurrencyTableViewCell: UITableViewCell {
     }
     
     func config(currency model: Currency) {
-        currencyLabel.text = "\(model.currencyCode) : \(model.currencyName)"
+        guard let code = model.currencyCode, let name = model.currencyName else { return }
+        currencyLabel.text = "\(code) : \(name)"
     }
 }
 
