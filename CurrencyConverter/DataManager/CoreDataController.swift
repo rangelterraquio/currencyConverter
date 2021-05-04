@@ -121,5 +121,35 @@ extension DataController {
             completion?(DataControllerError.NotFound)
             
         }
-    }    
+    }
+    
+    
+    // Busca no banco por algum objeto de acordo com o predicate fornecido.
+        /// Caso não encontre nem um *objetc*, o complition passa como argumento o erro DataControllerError.NotFound.
+        /// - Parameters:
+        ///   - predicate: NSPredicate
+        ///   - fetch: NSFetchRequest<NSFetchRequestResult>
+        ///   - handler: ([NSManagedObject]) -> Void
+        ///   - completion: ((Error?) -> Void)?
+        public func retrieveData(predicate: NSPredicate, fetch: NSFetchRequest<NSFetchRequestResult>, handler: @escaping ([NSManagedObject]) -> Void, completion: ((DataControllerError) -> Void)?) {
+            
+            let context: NSManagedObjectContext = self.manageContext
+            fetch.predicate =  predicate
+            
+            do{
+                
+                let results = try self.fechRequest(with: fetch, context: context)
+                handler(results)
+                
+            } catch DataControllerError.InvalidSearch {
+                
+                completion?(DataControllerError.InvalidSearch)
+                
+            } catch {
+                
+                completion?(DataControllerError.NotFound)
+                
+            }
+        }
+        
 }

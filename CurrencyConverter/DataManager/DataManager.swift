@@ -15,14 +15,36 @@ class DataManager {
         DataController()
     }()
     
-    public var context: NSManagedObjectContext {
+    var context: NSManagedObjectContext {
         dataController.manageContext
     }
-    
-    
+        
     private init() {}
     
-    public static let shared = DataManager()
+    static let shared = DataManager()
+    
+    func currenciesListNeedsUpdate() -> Bool {
+        if let lastUpdate = UserDefaults.lastCurrenciesListUpdate {
+            return Calendar.current.isDateInYesterday(lastUpdate)
+        }
+        return true
+    }
+    
+    func quotesNeedsUpdate(lastDateCollected: TimeInterval) -> Bool {
+        if let lastUpdate = UserDefaults.lastQuotesUpdate {
+            let lastDateDataWasCollected = Date(timeIntervalSince1970: lastDateCollected)
+            return lastUpdate != lastDateDataWasCollected
+        }
+        return true
+    }
+    
+    func hasUpdatedCurrenciesList() {
+        UserDefaults.lastCurrenciesListUpdate = Date()
+    }
+    
+    func hasUpdatedQuotes(in date: TimeInterval) {
+        UserDefaults.lastQuotesUpdate = Date(timeIntervalSince1970: date)
+    }
 }
 
 // MARK: - Insert
@@ -77,6 +99,20 @@ extension DataManager {
         let dataController = self.dataController
         
         dataController.retrieveData(fetch: entity.fetchRequest(), handler: { results in
+            completion?(results as? [T],nil)
+        }) { error in
+            completion?(nil,error)
+        }
+    }
+    
+    /// Busca os dados de qualquer entidade, por um predicate.
+    /// - Parameters:
+    ///   - entity: T.Type
+    ///   - completion: ([T]?,DataControllerError?) -> Void)?
+    func fetch<T: NSManagedObject>(entity: T.Type,predicate: NSPredicate, completion: (([T]?,DataControllerError?) -> Void)?) {
+        let dataController = self.dataController
+        
+        dataController.retrieveData(predicate: predicate, fetch: entity.fetchRequest(), handler: { results in
             completion?(results as? [T],nil)
         }) { error in
             completion?(nil,error)

@@ -8,9 +8,12 @@
 import UIKit
 
 class CCButton: UIButton {
-    
+    private let colorBkg: UIColor
+    private let colorBorder: UIColor
     //MARK: Initializers
     init(titleText: String, background color: UIColor = .white, borderColor: UIColor = .blue){
+        colorBkg = color
+        colorBorder = borderColor
         super.init(frame: .zero)
         
         setTitle(titleText, for: .normal)
@@ -29,7 +32,7 @@ class CCButton: UIButton {
         titleLabel?.font = .systemFont(ofSize: 20)
         setTitleColor(.blue, for: .normal)
             
-        layer.borderWidth = 1
+        layer.borderWidth = 2
         setTitleColor(.black, for: .normal)
         layer.borderColor = UIColor.blue.cgColor
     }
@@ -37,11 +40,12 @@ class CCButton: UIButton {
     override var isUserInteractionEnabled: Bool {
         didSet {
             if !isUserInteractionEnabled {
-                backgroundColor = backgroundColor?.withAlphaComponent(0.5)
+                backgroundColor = UIColor.lightGray.withAlphaComponent(0.6)
+                layer.borderColor = UIColor.lightGray.withAlphaComponent(0.5).cgColor
             } else {
-                backgroundColor = backgroundColor?.withAlphaComponent(1.0)
+                backgroundColor = colorBkg
+                layer.borderColor = colorBorder.cgColor
             }
         }
     }
-    
 }

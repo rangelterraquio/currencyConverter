@@ -15,6 +15,12 @@ class SelectCurrencyViewController: UIViewController {
         case to
     }
     
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.delegate = self
+        return searchBar
+    }()
+    
     private let tableView: UITableView = {
         let tv = UITableView()
         tv.register(SelectCurrencyTableViewCell.self, forCellReuseIdentifier: SelectCurrencyTableViewCell.reuserIdentifier)
@@ -44,22 +50,24 @@ class SelectCurrencyViewController: UIViewController {
     }()
     
     var didTapInConfirmButton: (() -> Void)?
+    
     private let currencySource: CurrencySource
     
     weak var delegate: SelectCurrencyDelegate?
     
-    let selectCurrencyViewModel = SelectCurrencyViewModel()
+    private let selectCurrencyViewModel: SelectCurrencyViewModel
     
     var currencies: [Currency] = []
     
-    private var selectedCurrency: Currency? {
+    var selectedCurrency: Currency? {
         didSet {
             confirmButton.isUserInteractionEnabled = selectedCurrency != nil
         }
     }
     
-    init(currencySource: CurrencySource) {
+    init(viewModel: SelectCurrencyViewModel = SelectCurrencyViewModel(), currencySource: CurrencySource) {
         self.currencySource = currencySource
+        self.selectCurrencyViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -71,6 +79,7 @@ class SelectCurrencyViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         
+        navigationItem.titleView = searchBar
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         selectCurrencyViewModel.list()
@@ -113,8 +122,6 @@ class SelectCurrencyViewController: UIViewController {
         
         self.present(actionSheet, animated: true, completion: nil)
     }
-    
-    
 }
 
 
@@ -163,33 +170,37 @@ extension SelectCurrencyViewController: ViewCoding {
             self.confirmButton.isHidden = true
             self.tableView.isHidden = true
         }
+        
         confirmButton.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
         
         navigationItem.setRightBarButton(filterButton, animated: true)
     }
 }
 
-extension SelectCurrencyViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return currencies.count
+
+extension SelectCurrencyViewController: UISearchBarDelegate {
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        navigationItem.setRightBarButton(filterButton, animated: true)
+        searchBar.showsCancelButton = false
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: SelectCurrencyTableViewCell.reuserIdentifier) as? SelectCurrencyTableViewCell {
-            cell.config(currency: currencies[indexPath.row])
-            return cell
-        }
-        return UITableViewCell()
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        navigationItem.setRightBarButton(filterButton, animated: true)
+        searchBar.showsCancelButton = false
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCurrency = currencies[indexPath.row]
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        navigationItem.rightBarButtonItem = nil
+        searchBar.showsCancelButton = true
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if selectedCurrency ==  currencies[indexPath.row] {
-            selectedCurrency = nil
-        }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)  {
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        selectCurrencyViewModel.search(for: searchBar.text)
     }
 }

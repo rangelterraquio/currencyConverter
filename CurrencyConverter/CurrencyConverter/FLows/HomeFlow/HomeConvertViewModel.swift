@@ -15,6 +15,8 @@ class HomeConvertViewModel: NSObject {
     
     public var bindValidatedInputs: ((Bool)->Void)?
     
+    public var bindErrorState: ((String)->Void)?
+    
     private let dataManager: DataManager
     
     init(service: CurrencyService = CurrencyService(), dataManager: DataManager = DataManager.shared) {
@@ -32,7 +34,12 @@ class HomeConvertViewModel: NSObject {
                 if let response = model, let quotes = response.quotes {
                     let text = self.convertAndFormatText(value: value, from: from, to: to, quotes: quotes)
                     self.bindResultConversionModel?(text)
-                    self.dataManager.insert(with: quotes, completion: nil)
+                    
+                    if self.dataManager.quotesNeedsUpdate(lastDateCollected: response.timestamp) {
+                        self.dataManager.insert(with: quotes, completion: nil)
+                        self.dataManager.hasUpdatedQuotes(in: response.timestamp)
+                    }
+                   
                 }
             case .error(_):
                 self.handleConversionOffiline(value: value, from: from, to: to)
@@ -42,9 +49,11 @@ class HomeConvertViewModel: NSObject {
     }
     
     private func handleConversionOffiline(value: Float, from: Currency, to: Currency) {
-        dataManager.fetch(entity: Quotes.self) { (model, error) in
+        dataManager.fetch(entity: Quotes.self) { [weak self] (model, error) in
+            guard let self = self else { return }
+            
             if let _ = error {
-                //TODO Error
+                self.bindErrorState?("Ops, Something goes wrong. Try again!")
                 return
             }
             guard let model = model?.first, let quotes: [String: Float] = try? model.quotes?.decoded() else {
@@ -57,11 +66,10 @@ class HomeConvertViewModel: NSObject {
     }
     
     
-    
     private func convertAndFormatText(value: Float, from: Currency, to: Currency, quotes: [String : Float]) -> String {
         
         guard let fromCode = from.currencyCode, let toCode = to.currencyCode else {
-            //TODO
+            bindErrorState?("Ops, Something goes wrong. Try again!")
             return ""
         }
         let amountInDolar = (quotes["USD\(fromCode)"] ?? 1) / value
@@ -77,5 +85,6 @@ class HomeConvertViewModel: NSObject {
             return
         }
         bindValidatedInputs?(false)
+        bindErrorState?("Ops, Invalid inputs. Try again!")
     }
 }

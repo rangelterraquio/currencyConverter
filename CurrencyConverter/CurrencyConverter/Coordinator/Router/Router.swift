@@ -18,10 +18,17 @@ class Router: NSObject, RouterProtocol{
     //MARK: -> Initialize
     /// - Parameter rootController: UINavigationController
     init(rootController: UINavigationController) {
-      self.rootController = rootController
-      completions = [:]
+        self.rootController = rootController
+        completions = [:]
+        super.init()
+        setAddtionalConfing()
     }
     
+    private func setAddtionalConfing() {
+        rootController?.navigationBar.tintColor = .black
+
+    }
+
     func toPresent() -> UIViewController? {
       return rootController
     }
@@ -59,6 +66,19 @@ class Router: NSObject, RouterProtocol{
         rootController?.pushViewController(controller, animated: animated)
     }
     
+    func push(_ module: Presentable?, animated: Bool, hideBottomBar: Bool, completion: (() -> Void)?) {
+      guard
+        let controller = module?.toPresent(),
+        (controller is UINavigationController == false)
+        else { assertionFailure("Deprecated push UINavigationController."); return }
+      
+      if let completion = completion {
+        completions[controller] = completion
+      }
+      controller.hidesBottomBarWhenPushed = hideBottomBar
+      rootController?.pushViewController(controller, animated: animated)
+    }
+    
     func popModule()  {
       popModule(animated: true)
     }
@@ -69,9 +89,10 @@ class Router: NSObject, RouterProtocol{
       }
     }
     
-    func setRootModule(_ module: Presentable?) {
-        guard let controller = module?.toPresent() else { return }
-        rootController?.setViewControllers([controller], animated: false)
+    func setRootModule(_ module: Presentable?, hideBar: Bool) {
+      guard let controller = module?.toPresent() else { return }
+      rootController?.setViewControllers([controller], animated: false)
+      rootController?.isNavigationBarHidden = hideBar
     }
     
     func popToRootModule(animated: Bool) {

@@ -18,10 +18,10 @@ class HomeViewController: UIViewController {
         return vStack
     }()
     
-    private let valueTextField: UITextField = {
-       let tf = UITextField()
+    private let valueTextField: CCTextField = {
+       let tf = CCTextField()
         tf.placeholder = "Type a value"
-        tf.layer.borderWidth = 1
+        tf.layer.borderWidth = 2
         tf.layer.borderColor = UIColor.blue.cgColor
         tf.textColor = .black
         return tf
@@ -41,6 +41,7 @@ class HomeViewController: UIViewController {
     
     private let convertButton: CCButton = {
         let button = CCButton(titleText: "Convert", background: .blue, borderColor: .blue)
+        button.setTitleColor(.white, for: .normal)
         button.isUserInteractionEnabled = false
         return button
     }()
@@ -55,6 +56,17 @@ class HomeViewController: UIViewController {
         return label
     }()
     
+    private let errorLabel:UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.font = .italicSystemFont(ofSize: 20)
+        label.textColor = .red
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
+    
     private let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.isHidden = true
@@ -64,7 +76,7 @@ class HomeViewController: UIViewController {
     
     var didTapSelectionCurrencyButton: ((SelectCurrencyViewController.CurrencySource) -> Void)?
     
-    var convertViewModel = HomeConvertViewModel()
+    let convertViewModel: HomeConvertViewModel
     
     private var fromCurrency: Currency? = Currency(code: "BRL", name: "Brazilian Real") {
         didSet {
@@ -78,6 +90,19 @@ class HomeViewController: UIViewController {
         }
     }
     
+    init(viewModel: HomeConvertViewModel = HomeConvertViewModel()) {
+        convertViewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+       
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -91,6 +116,7 @@ class HomeViewController: UIViewController {
     @objc
     func didTapConvertButton() {
         if let from = fromCurrency, let to = toCurrency {
+            errorLabel.isHidden = true
             resultLabel.text = ""
             activityIndicator.isHidden = false
             activityIndicator.startAnimating()
@@ -110,6 +136,7 @@ extension HomeViewController: ViewCoding {
     func buildViewHierarchy() {
         view.addSubview(vStack)
         view.addSubview(activityIndicator)
+        view.addSubview(errorLabel)
         
         vStack.addArrangedSubview(valueTextField)
         vStack.addArrangedSubview(fromCurrencyView)
@@ -149,6 +176,11 @@ extension HomeViewController: ViewCoding {
             .anchorCenterY(to: resultLabel, constant: -15)
             .anchorCenterXToSuperview()
         
+        errorLabel
+            .anchorSizeWithMultiplier(width: view.widthAnchor, widthMultiplier: 0.85)
+            .anchorCenterX(to: activityIndicator)
+            .anchorCenterY(to: activityIndicator)
+        
     }
     
     func setupAdditionalConfiguration() {
@@ -174,6 +206,15 @@ extension HomeViewController: ViewCoding {
         convertViewModel.bindValidatedInputs = { [weak self] isValid in
             DispatchQueue.main.async {
                 self?.convertButton.isUserInteractionEnabled = isValid
+                self?.errorLabel.isHidden = true
+            }
+        }
+        
+        convertViewModel.bindErrorState = { [weak self] error in
+            DispatchQueue.main.async {
+                self?.errorLabel.isHidden = false
+                self?.errorLabel.text = error
+                self?.resultLabel.text = ""
             }
         }
     }

@@ -13,7 +13,7 @@ class CCSelectionCurrencyView: UIView {
     //MARK: Views
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13)
+        label.font = .systemFont(ofSize: 15)
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
         label.textColor = .black

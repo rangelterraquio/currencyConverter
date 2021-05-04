@@ -44,12 +44,15 @@ struct ConversionResponseModel: Decodable {
     let source: String?
     var quotesModel: [Quote]? = []
     var quotes: [String:Float]?
+    let timestamp: TimeInterval
     
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         success = try values.decode(Bool.self, forKey: .success)
         source = try? values.decode(String.self, forKey: .source)
         quotes = try? values.decode([String:Float].self, forKey: .quotes)
+        timestamp = try values.decode(TimeInterval.self, forKey: .timestamp)
+        
         defer { setQuoteModel() }
     }
     private mutating func setQuoteModel() {
@@ -60,5 +63,6 @@ struct ConversionResponseModel: Decodable {
             case success
             case source
             case quotes
+            case timestamp
   }
 }
