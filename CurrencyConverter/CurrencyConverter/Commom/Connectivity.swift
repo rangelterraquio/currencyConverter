@@ -6,16 +6,12 @@
 //
 
 import Foundation
-
 import Network
-
 
 class Connectivity {
     static let shared = Connectivity()
  
-    private init() {
-        startMonitoring()
-    }
+    private init() { }
     
     deinit {
         stopMonitoring()
@@ -24,10 +20,7 @@ class Connectivity {
     
     var isMonitoring = false
 
-    var isConnected: Bool {
-        guard let monitor = monitor else { return false }
-        return monitor.currentPath.status == .satisfied
-    }
+    public private(set) var isConnected: Bool = false
     
     var interfaceType: NWInterface.InterfaceType? {
         guard let monitor = monitor else { return nil }
@@ -58,8 +51,9 @@ class Connectivity {
         let queue = DispatchQueue(label: "NetStatus_Monitor")
         monitor?.start(queue: queue)
      
-        monitor?.pathUpdateHandler = { _ in
-            self.netStatusChangeHandler?()
+        monitor?.pathUpdateHandler = { [weak self] path in
+            self?.netStatusChangeHandler?()
+            self?.isConnected = path.status == .satisfied
         }
      
         isMonitoring = true

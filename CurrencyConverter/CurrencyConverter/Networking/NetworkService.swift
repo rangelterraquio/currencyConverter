@@ -9,7 +9,7 @@ import Foundation
 
 enum NetworkResult<T> {
     case success(T?)
-    case error(Error)
+    case error(RequestErrorModel?)
 }
 
 protocol NetworkService {
@@ -18,7 +18,6 @@ protocol NetworkService {
     
     func request<T: Decodable>(target: Target, then complete: @escaping ServiceCompletion<T>)
     func request(target: Target, then complete: @escaping ServiceCompletion<Void>)
-
 }
 
 extension NetworkService {
@@ -28,16 +27,18 @@ extension NetworkService {
     }
     
     func request<T: Decodable>(target: Target, then complete: @escaping ServiceCompletion<T>) {
-        provider.dataTask(with: createRequest(target)) { (responseData, response, error) in
+        provider.dataTask(with: createRequest(target)) { (responseData, response , error) in
             if let error = error {
-                //TODO
-                complete(.error(error))
+                let errorModel = RequestErrorModel(error: error, response: response as? HTTPURLResponse)
+                complete(.error(errorModel))
                 return
             }
 
-            guard let data = responseData else { return }
-            let s = String(data: data, encoding: .utf8)
-            print(s)
+            guard let data = responseData else {
+                complete(.success(nil))
+                return
+            }
+            
             let result = try? T.decode(from: data)
             complete(.success(result))
         }.resume()
@@ -46,8 +47,8 @@ extension NetworkService {
     func request(target: Target, then complete: @escaping ServiceCompletion<Void>) {
         provider.dataTask(with: createRequest(target)) { (responseData, response, error) in
             if let error = error {
-                //TODO
-                complete(.error(error))
+                let errorModel = RequestErrorModel(error: error, response: response as? HTTPURLResponse)
+                complete(.error(errorModel))
                 return
             }
             complete(.success(nil))
@@ -58,11 +59,12 @@ extension NetworkService {
         let url = target.baseURL.appendingPathComponent(target.path)
         var urlComp = URLComponents(string: url.absoluteString)
         urlComp?.queryItems = []
-        for parameter in target.header! {
-            urlComp?.queryItems?.append(URLQueryItem(name: parameter.key, value: parameter.value))
+        if let header = target.header {
+            for parameter in header{
+                urlComp?.queryItems?.append(URLQueryItem(name: parameter.key, value: parameter.value))
+            }
         }
-
-        var request = URLRequest(url: urlComp!.url!)
+        var request = URLRequest(url: urlComp?.url ?? url)
         request.httpMethod = target.method.rawValue
         request.allHTTPHeaderFields = target.header
         return request

@@ -13,12 +13,15 @@ class SelectCurrencyViewModel: NSObject {
     
     public var bindListAvaiableCurrencies: (([Currency]) -> Void)?
     public var bindLoadingState: (() -> Void)?
+    public var bindErrorState: ((String)->Void)?
     
-    let dataManager = DataManager.shared
+    private let dataManager = DataManager.shared
     
     private var currencies: [Currency] = []
     
     private var selectedFilter: SelectCurrencyFilter = .none
+
+    private var error: CurrencyServiceError = .apiError
 
     private var currenciesFilteredByCode: [Currency] {
         currencies.sorted { $0.currencyCode ?? "" < $1.currencyCode ?? "" }
@@ -33,6 +36,13 @@ class SelectCurrencyViewModel: NSObject {
     }
     
     func list() {
+        
+        guard Connectivity.shared.isConnected else {
+            error = .connectioError
+            handleOffilineList()
+            return
+        }
+        
         currencyService.list { [weak self] (response) in
             guard let self = self else { return }
             
@@ -46,8 +56,15 @@ class SelectCurrencyViewModel: NSObject {
                             self.dataManager.insert(with: currencies, completion: nil)
                             self.dataManager.hasUpdatedCurrenciesList()
                         }
+                        return
                     }
-                case.error(_):
+                    self.error = .apiError
+                    self.handleOffilineList()
+                case.error(let errorModel):
+                    if let response = errorModel?.response {
+                        self.error = CurrencyServiceError(code: response.statusCode)
+                    }
+                    
                     self.handleOffilineList()
                     break
             }
@@ -85,13 +102,13 @@ class SelectCurrencyViewModel: NSObject {
 
         let predicateOr = NSCompoundPredicate(type: .or, subpredicates: [predicate1, predicate2])
         dataManager.fetch(entity: Currency.self, predicate: predicateOr) { (model, error) in
-            if let error = error {
-                //todo
+            if let _ = error {
+                self.bindListAvaiableCurrencies?([])
                 return
             }
             
             guard let currencies = model else {
-                //TODSO
+                self.bindListAvaiableCurrencies?([])
                 return
             }
             self.bindListAvaiableCurrencies?(currencies)
@@ -102,13 +119,13 @@ class SelectCurrencyViewModel: NSObject {
         dataManager.fetch(entity: Currency.self, completion: { [weak self] model, error  in
             guard let self = self else { return }
             
-            if let error = error {
-                //todo
+            if let _ = error {
+                self.bindErrorState?(self.error.localizedDescription)
                 return
             }
             
             guard let currencies = model else {
-                //TODSO
+                self.bindErrorState?(self.error.localizedDescription)
                 return
             }
             self.currencies = currencies

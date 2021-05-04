@@ -66,7 +66,7 @@ class Router: NSObject, RouterProtocol{
         rootController?.pushViewController(controller, animated: animated)
     }
     
-    func push(_ module: Presentable?, animated: Bool, hideBottomBar: Bool, completion: (() -> Void)?) {
+    func push(_ module: Presentable?, animated: Bool, hideNavBar: Bool, completion: (() -> Void)?) {
       guard
         let controller = module?.toPresent(),
         (controller is UINavigationController == false)
@@ -75,7 +75,7 @@ class Router: NSObject, RouterProtocol{
       if let completion = completion {
         completions[controller] = completion
       }
-      controller.hidesBottomBarWhenPushed = hideBottomBar
+      rootController?.isNavigationBarHidden = hideNavBar
       rootController?.pushViewController(controller, animated: animated)
     }
     

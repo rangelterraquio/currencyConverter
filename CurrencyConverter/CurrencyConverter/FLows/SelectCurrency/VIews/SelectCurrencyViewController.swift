@@ -30,6 +30,7 @@ class SelectCurrencyViewController: UIViewController {
     
     private let confirmButton: CCButton = {
         let button = CCButton(titleText: "Okay", background: .blue, borderColor: .blue)
+        button.setTitleColor(.white, for: .normal)
         button.isUserInteractionEnabled = false
         button.isHidden = true
         return button
@@ -47,6 +48,17 @@ class SelectCurrencyViewController: UIViewController {
         indicator.isHidden = true
         indicator.hidesWhenStopped = true
         return indicator
+    }()
+    
+    private let errorLabel:UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.font = .italicSystemFont(ofSize: 20)
+        label.textColor = .red
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
     }()
     
     var didTapInConfirmButton: (() -> Void)?
@@ -130,6 +142,7 @@ extension SelectCurrencyViewController: ViewCoding {
         view.addSubview(tableView)
         view.addSubview(confirmButton)
         view.addSubview(activityIndicator)
+        view.addSubview(errorLabel)
     }
     
     func setupConstraints() {
@@ -143,6 +156,10 @@ extension SelectCurrencyViewController: ViewCoding {
             .anchorSize(heightConstant: 50)
         
         activityIndicator.anchorCenterToSuperview()
+        
+        errorLabel
+            .anchorCenterToSuperview()
+            .anchorSizeWithMultiplier(width: view.widthAnchor, widthMultiplier: 0.85)
     }
     
     func setupAdditionalConfiguration() {
@@ -156,6 +173,7 @@ extension SelectCurrencyViewController: ViewCoding {
         
         selectCurrencyViewModel.bindListAvaiableCurrencies = { currencies in
             DispatchQueue.main.async {
+                self.errorLabel.isHidden = true
                 self.tableView.isHidden = false
                 self.confirmButton.isHidden = false
                 self.activityIndicator.stopAnimating()
@@ -165,10 +183,23 @@ extension SelectCurrencyViewController: ViewCoding {
         }
       
         selectCurrencyViewModel.bindLoadingState = {
-            self.activityIndicator.isHidden = false
-            self.activityIndicator.startAnimating()
-            self.confirmButton.isHidden = true
-            self.tableView.isHidden = true
+            DispatchQueue.main.async {
+                self.errorLabel.isHidden = true
+                self.activityIndicator.isHidden = false
+                self.activityIndicator.startAnimating()
+                self.confirmButton.isHidden = true
+                self.tableView.isHidden = true
+            }
+        }
+        
+        selectCurrencyViewModel.bindErrorState = { error in
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.confirmButton.isHidden = true
+                self.tableView.isHidden = true
+                self.errorLabel.isHidden = false
+                self.errorLabel.text = error
+            }
         }
         
         confirmButton.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)

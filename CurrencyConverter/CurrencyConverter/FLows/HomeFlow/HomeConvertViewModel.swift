@@ -18,6 +18,8 @@ class HomeConvertViewModel: NSObject {
     public var bindErrorState: ((String)->Void)?
     
     private let dataManager: DataManager
+   
+    private var error: CurrencyServiceError = .apiError
     
     init(service: CurrencyService = CurrencyService(), dataManager: DataManager = DataManager.shared) {
         self.currencyService = service
@@ -26,7 +28,13 @@ class HomeConvertViewModel: NSObject {
     
     func convert(from: Currency, to: Currency, value: Float) {
         
-        currencyService.convert(value: value, from: from, to: to) { [weak self] (result) in
+        guard Connectivity.shared.isConnected else {
+            error = .connectioError
+            handleConversionOffiline(value: value, from: from, to: to)
+            return
+        }
+        
+        currencyService.convert() { [weak self] (result) in
             guard let self = self else { return }
             
             switch result {
@@ -39,9 +47,16 @@ class HomeConvertViewModel: NSObject {
                         self.dataManager.insert(with: quotes, completion: nil)
                         self.dataManager.hasUpdatedQuotes(in: response.timestamp)
                     }
-                   
+                    return
                 }
-            case .error(_):
+                
+                self.error = .apiError
+                self.handleConversionOffiline(value: value, from: from, to: to)
+
+            case .error(let errorModel):
+                if let response = errorModel?.response {
+                    self.error = CurrencyServiceError(code: response.statusCode)
+                }
                 self.handleConversionOffiline(value: value, from: from, to: to)
                 break
             }
@@ -53,12 +68,15 @@ class HomeConvertViewModel: NSObject {
             guard let self = self else { return }
             
             if let _ = error {
-                self.bindErrorState?("Ops, Something goes wrong. Try again!")
+                self.bindErrorState?(self.error.localizedDescription)
                 return
             }
+            
             guard let model = model?.first, let quotes: [String: Float] = try? model.quotes?.decoded() else {
+                self.bindErrorState?(self.error.localizedDescription)
                 return
             }
+            
             let text = self.convertAndFormatText(value: value, from: from, to: to, quotes: quotes)
             self.bindResultConversionModel?(text)
             
@@ -69,7 +87,7 @@ class HomeConvertViewModel: NSObject {
     private func convertAndFormatText(value: Float, from: Currency, to: Currency, quotes: [String : Float]) -> String {
         
         guard let fromCode = from.currencyCode, let toCode = to.currencyCode else {
-            bindErrorState?("Ops, Something goes wrong. Try again!")
+            bindErrorState?(CurrencyServiceError.invalidCurrencies.localizedDescription)
             return ""
         }
         let amountInDolar = (quotes["USD\(fromCode)"] ?? 1) / value
@@ -85,6 +103,6 @@ class HomeConvertViewModel: NSObject {
             return
         }
         bindValidatedInputs?(false)
-        bindErrorState?("Ops, Invalid inputs. Try again!")
+        bindErrorState?(CurrencyServiceError.invalidAmount.localizedDescription)
     }
 }

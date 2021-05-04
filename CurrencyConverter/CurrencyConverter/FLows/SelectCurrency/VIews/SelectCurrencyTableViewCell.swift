@@ -38,16 +38,12 @@ class SelectCurrencyTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override var isSelected: Bool {
-        didSet {
-            print("Entrouu aqui")
-            DispatchQueue.main.async { [self] in
-                selectedMarkImage.isHidden = !isSelected
-            }
-        }
+  
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        selectedMarkImage.isHidden = !selected
     }
-    
+   
     override func prepareForReuse() {
         super.prepareForReuse()
         selectedMarkImage.isHidden = true

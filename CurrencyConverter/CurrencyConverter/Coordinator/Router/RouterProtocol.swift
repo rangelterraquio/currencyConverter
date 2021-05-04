@@ -15,7 +15,7 @@ protocol RouterProtocol: Presentable {
 
   func push(_ module: Presentable?, animated: Bool)
   func push(_ module: Presentable?, animated: Bool, completion: (() -> Void)?)
-  func push(_ module: Presentable?, animated: Bool, hideBottomBar: Bool, completion: (() -> Void)?)
+  func push(_ module: Presentable?, animated: Bool, hideNavBar: Bool, completion: (() -> Void)?)
     
   func popModule()
   func popModule(animated: Bool)

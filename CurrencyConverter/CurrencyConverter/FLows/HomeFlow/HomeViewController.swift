@@ -101,6 +101,7 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
        
     }
     override func viewDidLoad() {
@@ -173,13 +174,13 @@ extension HomeViewController: ViewCoding {
             .anchorHorizontal(left: view.leftAnchor, right: view.rightAnchor, leftConstant: 20, rightConstant: 20)
         
         activityIndicator
-            .anchorCenterY(to: resultLabel, constant: -15)
+            .anchorVertical(top: convertButton.bottomAnchor, topConstant: 20)
             .anchorCenterXToSuperview()
         
         errorLabel
             .anchorSizeWithMultiplier(width: view.widthAnchor, widthMultiplier: 0.85)
             .anchorCenterX(to: activityIndicator)
-            .anchorCenterY(to: activityIndicator)
+            .anchorVertical(top: convertButton.bottomAnchor, topConstant: 20)
         
     }
     
@@ -215,6 +216,7 @@ extension HomeViewController: ViewCoding {
                 self?.errorLabel.isHidden = false
                 self?.errorLabel.text = error
                 self?.resultLabel.text = ""
+                self?.activityIndicator.stopAnimating()
             }
         }
     }

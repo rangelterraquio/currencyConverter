@@ -48,7 +48,7 @@ final class HomeCoordinator: BaseCoordinator {
             self.router.popModule(animated: true)
         }
         
-        router.push(vc, animated: true, hideBottomBar: false, completion: nil)
+        router.push(vc, animated: true, hideNavBar: false, completion: nil)
     }
     
 }

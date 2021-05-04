@@ -52,6 +52,8 @@
 		70ED4563264093EC006E4FBA /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ED4562264093EC006E4FBA /* UserDefaults+Extension.swift */; };
 		70ED456A2640BD9F006E4FBA /* SelectCurrencyViewController+DelegateDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ED45692640BD9F006E4FBA /* SelectCurrencyViewController+DelegateDataSource.swift */; };
 		70ED45722640C197006E4FBA /* CCTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ED45712640C197006E4FBA /* CCTextField.swift */; };
+		70ED45772640D935006E4FBA /* CurrencyServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ED45762640D935006E4FBA /* CurrencyServiceError.swift */; };
+		70ED457C2640DAFC006E4FBA /* RequestErrorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ED457B2640DAFC006E4FBA /* RequestErrorModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +125,8 @@
 		70ED4562264093EC006E4FBA /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 		70ED45692640BD9F006E4FBA /* SelectCurrencyViewController+DelegateDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectCurrencyViewController+DelegateDataSource.swift"; sourceTree = "<group>"; };
 		70ED45712640C197006E4FBA /* CCTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCTextField.swift; sourceTree = "<group>"; };
+		70ED45762640D935006E4FBA /* CurrencyServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyServiceError.swift; sourceTree = "<group>"; };
+		70ED457B2640DAFC006E4FBA /* RequestErrorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestErrorModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +219,7 @@
 				7033545A263DAB98000C67D9 /* NetworkTarget.swift */,
 				70335462263DACE3000C67D9 /* NetworkConstants.swift */,
 				70335467263DAEA9000C67D9 /* NetworkService.swift */,
+				70ED457B2640DAFC006E4FBA /* RequestErrorModel.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -234,6 +239,7 @@
 			children = (
 				70335476263DB82F000C67D9 /* CurrencyTarget.swift */,
 				7033547B263DBCE8000C67D9 /* CurrencyService.swift */,
+				70ED45762640D935006E4FBA /* CurrencyServiceError.swift */,
 			);
 			path = Converter;
 			sourceTree = "<group>";
@@ -526,6 +532,7 @@
 				70335477263DB82F000C67D9 /* CurrencyTarget.swift in Sources */,
 				70335493263E42CD000C67D9 /* CoordinatorOutput.swift in Sources */,
 				705A9265263F62D700D9FC95 /* CCButton.swift in Sources */,
+				70ED457C2640DAFC006E4FBA /* RequestErrorModel.swift in Sources */,
 				7033546E263DB435000C67D9 /* Codable+Extension.swift in Sources */,
 				70335482263E231F000C67D9 /* Currency.swift in Sources */,
 				703354A4263E436C000C67D9 /* Router.swift in Sources */,
@@ -543,6 +550,7 @@
 				70ED456A2640BD9F006E4FBA /* SelectCurrencyViewController+DelegateDataSource.swift in Sources */,
 				70335426263DA92F000C67D9 /* SceneDelegate.swift in Sources */,
 				705A9286263F873C00D9FC95 /* DataManager.swift in Sources */,
+				70ED45772640D935006E4FBA /* CurrencyServiceError.swift in Sources */,
 				705A9232263EED9600D9FC95 /* UIView+Extension.swift in Sources */,
 				7033545B263DAB98000C67D9 /* NetworkTarget.swift in Sources */,
 				705A923E263EF33A00D9FC95 /* SelectCurrencyViewController.swift in Sources */,
