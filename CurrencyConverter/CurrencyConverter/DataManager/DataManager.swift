@@ -8,7 +8,6 @@
 import Foundation
 import CoreData
 
-/// Especialista em Core Data, gerencia os modos de insert, fetch, update e delete para todos as entitys
 class DataManager {
     
     private lazy var dataController: DataController = {
@@ -23,17 +22,16 @@ class DataManager {
     
     static let shared = DataManager()
     
-    func currenciesListNeedsUpdate() -> Bool {
+    var needsUpdateCurrenciesListFromServer: Bool {
         if let lastUpdate = UserDefaults.lastCurrenciesListUpdate {
             return Calendar.current.isDateInYesterday(lastUpdate)
         }
         return true
     }
     
-    func quotesNeedsUpdate(lastDateCollected: TimeInterval) -> Bool {
+    var needsUpdateQuotesFromServer: Bool {
         if let lastUpdate = UserDefaults.lastQuotesUpdate {
-            let lastDateDataWasCollected = Date(timeIntervalSince1970: lastDateCollected)
-            return lastUpdate != lastDateDataWasCollected
+            return Calendar.current.isDateInYesterday(lastUpdate)
         }
         return true
     }
@@ -45,16 +43,18 @@ class DataManager {
     func hasUpdatedQuotes(in date: TimeInterval) {
         UserDefaults.lastQuotesUpdate = Date(timeIntervalSince1970: date)
     }
+    
+    func resetUpdateDates() {
+        UserDefaults.lastQuotesUpdate = nil
+        UserDefaults.lastCurrenciesListUpdate = nil
+    }
 }
 
 // MARK: - Insert
 extension DataManager {
     
-    /// Inst.
-    /// - Parameters:
-    ///   - currency: Currency
-    ///   - completion: (DataControllerError) -> Void)?
-    func insert(with currencies: [Currency], completion: ((DataControllerError) -> Void)?) {
+    
+    func insert(with currencies: [Currency], completion: ((DataControllerError?) -> Void)?) {
         let dataController = self.dataController
         
         dataController.insertData(entity: "Currency", handler: { (context) in
@@ -68,11 +68,7 @@ extension DataManager {
         }
     }
     
-    /// Inst.
-    /// - Parameters:
-    ///   - currency: [String: Float]
-    ///   - completion: (DataControllerError) -> Void)?
-    func insert(with quotes: [String: Float], completion: ((DataControllerError) -> Void)?) {
+    func insert(with quotes: [String: Float], completion: ((DataControllerError?) -> Void)?) {
         let dataController = self.dataController
         
         dataController.insertData(entity: "Quotes", handler: { (context) in
@@ -91,10 +87,6 @@ extension DataManager {
 // MARK: - Fetch
 extension DataManager {
     
-    /// Busca todos os dados de qualquer entidade.
-    /// - Parameters:
-    ///   - entity: T.Type
-    ///   - completion: ([T]?,DataControllerError?) -> Void)?
     func fetch<T: NSManagedObject>(entity: T.Type, completion: (([T]?,DataControllerError?) -> Void)?) {
         let dataController = self.dataController
         
@@ -105,10 +97,6 @@ extension DataManager {
         }
     }
     
-    /// Busca os dados de qualquer entidade, por um predicate.
-    /// - Parameters:
-    ///   - entity: T.Type
-    ///   - completion: ([T]?,DataControllerError?) -> Void)?
     func fetch<T: NSManagedObject>(entity: T.Type,predicate: NSPredicate, completion: (([T]?,DataControllerError?) -> Void)?) {
         let dataController = self.dataController
         
@@ -119,5 +107,14 @@ extension DataManager {
         }
     }
     
+}
+
+extension DataManager {
+    
+    func delete(entityName: String, completion: ((DataControllerError?) -> Void)?) {
+        let dataController = self.dataController
+        
+        dataController.deleteAllData(entity: entityName, completion: completion)
+    }
 }
 

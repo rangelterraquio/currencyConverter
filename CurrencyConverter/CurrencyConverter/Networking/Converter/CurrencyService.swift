@@ -17,7 +17,6 @@ class CurrencyService: CurrencyServiceProtocol {
     typealias Target = CurrencyTarget
     
     func convert(handle: @escaping ServiceCompletion<ConversionResponseModel>) {
-        
         request(target: .convert, then: handle)
     }
     

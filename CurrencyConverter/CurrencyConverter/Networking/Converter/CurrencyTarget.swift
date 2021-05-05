@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum CurrencyTarget {
     case convert
     case list

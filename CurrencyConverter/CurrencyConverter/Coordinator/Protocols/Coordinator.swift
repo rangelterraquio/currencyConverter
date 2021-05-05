@@ -8,6 +8,5 @@
 import Foundation
 
 public protocol Coordinator: NSObject {
-    ///Method to start the module
     func start()
 }

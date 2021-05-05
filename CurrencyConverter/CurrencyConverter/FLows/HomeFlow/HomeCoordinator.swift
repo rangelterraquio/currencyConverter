@@ -16,10 +16,7 @@ final class HomeCoordinator: BaseCoordinator {
     private weak var homeHandler: SelectCurrencyDelegate?
     
     //MARK:  -> Initialize
-    
-    /// - Parameters:
-    ///   - router: Router
-    ///   - factory: HomeModuleFactory
+
     init(router: Router, factory: HomeModuleFactory) {
         self.factory = factory
         self.router = router
@@ -29,7 +26,6 @@ final class HomeCoordinator: BaseCoordinator {
         showHome()
     }
     
-    /// Show home module
     private func showHome() {
         let homeHandler = factory.makeHomeHandler()
         self.homeHandler = homeHandler
@@ -50,5 +46,4 @@ final class HomeCoordinator: BaseCoordinator {
         
         router.push(vc, animated: true, hideNavBar: false, completion: nil)
     }
-    
 }

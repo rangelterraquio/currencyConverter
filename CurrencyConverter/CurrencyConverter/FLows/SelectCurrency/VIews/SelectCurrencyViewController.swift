@@ -15,6 +15,7 @@ class SelectCurrencyViewController: UIViewController {
         case to
     }
     
+    //MARK: - Views
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.delegate = self
@@ -61,7 +62,8 @@ class SelectCurrencyViewController: UIViewController {
         return label
     }()
     
-    var didTapInConfirmButton: (() -> Void)?
+    //MARK: - Properties
+    public var didTapInConfirmButton: (() -> Void)?
     
     private let currencySource: CurrencySource
     
@@ -77,6 +79,7 @@ class SelectCurrencyViewController: UIViewController {
         }
     }
     
+    //MARK: - Init
     init(viewModel: SelectCurrencyViewModel = SelectCurrencyViewModel(), currencySource: CurrencySource) {
         self.currencySource = currencySource
         self.selectCurrencyViewModel = viewModel
@@ -87,13 +90,17 @@ class SelectCurrencyViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - View lifecycle
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         
         navigationItem.titleView = searchBar
-        activityIndicator.isHidden = false
-        activityIndicator.startAnimating()
         selectCurrencyViewModel.list()
     }
     
@@ -136,7 +143,7 @@ class SelectCurrencyViewController: UIViewController {
     }
 }
 
-
+//MARK: - ViewCoding
 extension SelectCurrencyViewController: ViewCoding {
     func buildViewHierarchy() {
         view.addSubview(tableView)
@@ -208,7 +215,7 @@ extension SelectCurrencyViewController: ViewCoding {
     }
 }
 
-
+//MARK: - UISearchBarDelegate
 extension SelectCurrencyViewController: UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()

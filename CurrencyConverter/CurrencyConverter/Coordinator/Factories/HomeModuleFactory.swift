@@ -8,11 +8,8 @@
 import Foundation
 
 protocol HomeModuleFactory {
-    /// Method to create LoginView
-    /// - Returns: UIViewController
+
     func makeHomeHandler() -> HomeViewController
     
-    /// Method to create SelectCurrencyModuleFactory
-    /// - Returns: UIViewController
     func makeSelectCurrencyHandler(selection source: SelectCurrencyViewController.CurrencySource) -> SelectCurrencyViewController
 }

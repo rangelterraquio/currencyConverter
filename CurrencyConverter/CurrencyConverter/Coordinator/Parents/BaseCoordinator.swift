@@ -7,7 +7,6 @@
 
 import Foundation
 
-//Classe that represents a base coordinator
 class BaseCoordinator: NSObject, Coordinator {
     
     
@@ -15,16 +14,11 @@ class BaseCoordinator: NSObject, Coordinator {
     
     func start() {}
     
-    /// Method to add child coordinators
-    /// - Note It's necessary to keep a referece to child coordinators for them not be deallocated
-    /// - Parameter coordinator: Coordinator
     func addChild(_ coordinator: Coordinator) {
       guard !childCoordinators.contains(where: { $0 === coordinator }) else { return }
       childCoordinators.append(coordinator)
     }
     
-    /// Method to remoce child coordinators
-    /// - Parameter coordinator: Coordinator?
     func removeChild(_ coordinator: Coordinator?) {
       
       guard childCoordinators.isEmpty == false, let coordinator = coordinator else { return }

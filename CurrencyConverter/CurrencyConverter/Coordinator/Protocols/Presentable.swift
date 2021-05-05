@@ -8,14 +8,13 @@
 import Foundation
 import UIKit
 
-/// Protocol that represent an object that can be Presentable
 protocol Presentable {
   func toPresent() -> UIViewController?
 }
 
 extension UIViewController: Presentable {
-  
-  func toPresent() -> UIViewController? {
-    return self
-  }
+    
+    func toPresent() -> UIViewController? {
+        return self
+    }
 }

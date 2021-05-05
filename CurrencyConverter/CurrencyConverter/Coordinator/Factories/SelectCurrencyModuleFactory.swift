@@ -8,7 +8,6 @@
 import Foundation
 
 protocol SelectCurrencyModuleFactory {
-    /// Method to create SelectCurrencyModuleFactory
-    /// - Returns: UIViewController
+
     func makeSelectCurrencyHandler() -> SelectCurrencyViewController
 }

@@ -9,6 +9,5 @@ import Foundation
 
 protocol CoordinatorOutput: Coordinator{
     
-    /// Closure called when a module flow finishs
     var finishFlow: (() -> Void)? { get set }
 }

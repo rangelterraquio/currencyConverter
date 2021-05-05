@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 protocol SelectCurrencyDelegate: class {
     func didSelect(currency: Currency, source: SelectCurrencyViewController.CurrencySource)
 }

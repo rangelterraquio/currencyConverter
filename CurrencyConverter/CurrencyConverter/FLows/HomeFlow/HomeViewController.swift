@@ -9,6 +9,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
 
+    //MARK: - Views
     private let vStack: UIStackView = {
        let vStack = UIStackView()
         vStack.axis = .vertical
@@ -74,9 +75,10 @@ class HomeViewController: UIViewController {
         return indicator
     }()
     
-    var didTapSelectionCurrencyButton: ((SelectCurrencyViewController.CurrencySource) -> Void)?
+    //MARK: - Properties
+    public var didTapSelectionCurrencyButton: ((SelectCurrencyViewController.CurrencySource) -> Void)?
     
-    let convertViewModel: HomeConvertViewModel
+    public let convertViewModel: HomeConvertViewModel
     
     private var fromCurrency: Currency? = Currency(code: "BRL", name: "Brazilian Real") {
         didSet {
@@ -90,6 +92,7 @@ class HomeViewController: UIViewController {
         }
     }
     
+    //MARK: - Init
     init(viewModel: HomeConvertViewModel = HomeConvertViewModel()) {
         convertViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -99,6 +102,7 @@ class HomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - View Lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
@@ -130,8 +134,7 @@ class HomeViewController: UIViewController {
         convertViewModel.validateInputs(from: fromCurrency, to: toCurrency, value: valueTextField.text)
     }
 }
-
-
+//MARK: - ViewCoding
 extension HomeViewController: ViewCoding {
   
     func buildViewHierarchy() {
@@ -181,13 +184,13 @@ extension HomeViewController: ViewCoding {
             .anchorSizeWithMultiplier(width: view.widthAnchor, widthMultiplier: 0.85)
             .anchorCenterX(to: activityIndicator)
             .anchorVertical(top: convertButton.bottomAnchor, topConstant: 20)
-        
     }
     
     func setupAdditionalConfiguration() {
         view.backgroundColor = .white
         
         valueTextField.delegate = self
+        valueTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
         fromCurrencyView.config(with: fromCurrency)
         fromCurrencyView.button.addTarget(self, action: #selector(didTapSelectCurrencyButton(_:)), for: .touchUpInside)
@@ -222,6 +225,7 @@ extension HomeViewController: ViewCoding {
     }
 }
 
+//MARK: - SelectCurrencyDelegate
 extension HomeViewController: SelectCurrencyDelegate {
     
     func didSelect(currency: Currency, source: SelectCurrencyViewController.CurrencySource) {
@@ -236,15 +240,19 @@ extension HomeViewController: SelectCurrencyDelegate {
     }
 }
 
-
+//MARK: - UITextFieldDelegate
 extension HomeViewController: UITextFieldDelegate {
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return true
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        validateInputs()
+    }
+    
+   @objc
+    func textFieldDidChange(){
         validateInputs()
     }
 }

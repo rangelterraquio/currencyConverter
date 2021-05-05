@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-/// Class responsable for router mdules
+
 class Router: NSObject, RouterProtocol{
     
     
@@ -16,7 +16,6 @@ class Router: NSObject, RouterProtocol{
     
 
     //MARK: -> Initialize
-    /// - Parameter rootController: UINavigationController
     init(rootController: UINavigationController) {
         self.rootController = rootController
         completions = [:]

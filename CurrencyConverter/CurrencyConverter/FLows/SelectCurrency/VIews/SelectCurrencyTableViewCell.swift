@@ -13,6 +13,7 @@ class SelectCurrencyTableViewCell: UITableViewCell {
         return String(describing: SelectCurrencyTableViewCell.self)
     }
     
+    //MARK: - Views
     private let currencyLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
@@ -30,6 +31,7 @@ class SelectCurrencyTableViewCell: UITableViewCell {
         return img
     }()
     
+    //MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -55,7 +57,7 @@ class SelectCurrencyTableViewCell: UITableViewCell {
     }
 }
 
-
+//MARK: - ViewCoding
 extension SelectCurrencyTableViewCell: ViewCoding {
    
     func buildViewHierarchy() {
@@ -74,6 +76,5 @@ extension SelectCurrencyTableViewCell: ViewCoding {
             .anchorHorizontal(right: contentView.rightAnchor, rightConstant: 10)
             .anchorCenterYToSuperview()
             .anchorSize(widthConstant: 25, heightConstant: 25)
-        
     }
 }

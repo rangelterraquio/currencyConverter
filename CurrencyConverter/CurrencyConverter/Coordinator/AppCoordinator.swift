@@ -19,9 +19,6 @@ final class AppCoordinator: BaseCoordinator{
     private let coordinatorFactory: CoordinatorFactory
  
     //MARK:  -> Initialize
-    /// - Parameters:
-    ///   - router: Router
-    ///   - coordinatorFactory: CoordinatorFactory
     init(router: Router, coordinatorFactory: CoordinatorFactory) {
         self.router = router
         self.coordinatorFactory = coordinatorFactory
@@ -31,12 +28,9 @@ final class AppCoordinator: BaseCoordinator{
         runMainFlow()
     }
     
-    /// Method to run Main flow
     private func runMainFlow(){
         let coordinator = coordinatorFactory.makeHomeCoordinator(router)
         addChild(coordinator)
         coordinator.start()
     }
-    
-    
 }

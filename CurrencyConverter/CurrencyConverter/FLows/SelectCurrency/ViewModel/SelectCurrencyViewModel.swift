@@ -21,7 +21,7 @@ class SelectCurrencyViewModel: NSObject {
     
     private var selectedFilter: SelectCurrencyFilter = .none
 
-    private var error: CurrencyServiceError = .apiError
+    private var error: CurrencyServiceError?
 
     private var currenciesFilteredByCode: [Currency] {
         currencies.sorted { $0.currencyCode ?? "" < $1.currencyCode ?? "" }
@@ -36,9 +36,16 @@ class SelectCurrencyViewModel: NSObject {
     }
     
     func list() {
+        bindLoadingState?()
         
         guard Connectivity.shared.isConnected else {
-            error = .connectioError
+            error = .notConnected
+            handleOffilineList()
+            return
+        }
+        
+        
+        guard dataManager.needsUpdateCurrenciesListFromServer else {
             handleOffilineList()
             return
         }
@@ -47,30 +54,32 @@ class SelectCurrencyViewModel: NSObject {
             guard let self = self else { return }
             
             switch response {
-                case .success(let model):
-                    if let model = model, let currencies = model.currencies {
+                case .success(let modelResult):
+                    guard let model = modelResult, model.success, let currencies = model.currencies else {
+                        self.error = modelResult?.error
+                        self.handleOffilineList()
+                        return
+                    }
                         self.bindListAvaiableCurrencies?(currencies)
                         self.currencies = currencies
                         
-                        if self.dataManager.currenciesListNeedsUpdate() {
-                            self.dataManager.insert(with: currencies, completion: nil)
-                            self.dataManager.hasUpdatedCurrenciesList()
-                        }
-                        return
-                    }
-                    self.error = .apiError
+                        
+                        self.updateLocalDatabase(with: currencies)
+                case.error(_):
+                    self.error = .unkown
                     self.handleOffilineList()
-                case.error(let errorModel):
-                    if let response = errorModel?.response {
-                        self.error = CurrencyServiceError(code: response.statusCode)
-                    }
-                    
-                    self.handleOffilineList()
-                    break
             }
         }
     }
     
+    private func updateLocalDatabase(with currencies: [Currency]) {
+        dataManager.insert(with: currencies) { [weak self] (error) in
+            
+            guard error == nil else { return }
+            
+            self?.dataManager.hasUpdatedCurrenciesList()
+        }
+    }
     
     func filterList(by filter: SelectCurrencyFilter) {
         
@@ -119,18 +128,18 @@ class SelectCurrencyViewModel: NSObject {
         dataManager.fetch(entity: Currency.self, completion: { [weak self] model, error  in
             guard let self = self else { return }
             
-            if let _ = error {
-                self.bindErrorState?(self.error.localizedDescription)
+            if let _ = error, let serviceError = self.error {
+                self.bindErrorState?(serviceError.description)
                 return
             }
             
             guard let currencies = model else {
-                self.bindErrorState?(self.error.localizedDescription)
+                self.bindErrorState?(CurrencyServiceError.unkown.description)
                 return
             }
+            
             self.currencies = currencies
             self.bindListAvaiableCurrencies?(currencies)
         })
     }
-    
 }

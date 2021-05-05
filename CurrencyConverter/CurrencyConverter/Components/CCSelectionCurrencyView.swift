@@ -62,8 +62,6 @@ extension CCSelectionCurrencyView: ViewCoding {
         button
             .anchorVertical(top: titleLabel.bottomAnchor, bottom: bottomAnchor, topConstant: 5)
             .anchorHorizontal(left: leftAnchor, right: rightAnchor)
-        
-        
     }
     
     func setupAdditionalConfiguration() {

@@ -7,10 +7,8 @@
 
 import Foundation
 
-/// Factory for modules
 final class ModuleFactory: HomeModuleFactory {
    
-    
     func makeSelectCurrencyHandler(selection source: SelectCurrencyViewController.CurrencySource) -> SelectCurrencyViewController {
         let vc = SelectCurrencyViewController(currencySource: source)
         return vc

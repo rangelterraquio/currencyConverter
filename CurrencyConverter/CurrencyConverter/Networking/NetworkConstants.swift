@@ -18,5 +18,5 @@ struct NetworkConstants {
         }
     }
     
-    static let api_key = "effcc144e37a07239fff5118b933552d"
+    static let api_key = "fa48d928d7ceb255ad50098a18a50481"
 }

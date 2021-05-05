@@ -9,40 +9,20 @@ import Foundation
 import Network
 
 class Connectivity {
+    
     static let shared = Connectivity()
  
-    private init() { }
+    private init() {}
     
     deinit {
         stopMonitoring()
     }
-    var monitor: NWPathMonitor?
     
-    var isMonitoring = false
+    private var monitor: NWPathMonitor?
+    
+    public var isMonitoring = false
 
     public private(set) var isConnected: Bool = false
-    
-    var interfaceType: NWInterface.InterfaceType? {
-        guard let monitor = monitor else { return nil }
-     
-        return monitor.currentPath.availableInterfaces.filter {
-            monitor.currentPath.usesInterfaceType($0.type) }.first?.type
-    }
-    
-    var availableInterfacesTypes: [NWInterface.InterfaceType]? {
-        guard let monitor = monitor else { return nil }
-        return monitor.currentPath.availableInterfaces.map { $0.type }
-    }
-    
-    var isExpensive: Bool {
-        return monitor?.currentPath.isExpensive ?? false
-    }
-    
-    var didStartMonitoringHandler: (() -> Void)?
-     
-    var didStopMonitoringHandler: (() -> Void)?
-     
-    var netStatusChangeHandler: (() -> Void)?
     
     func startMonitoring() {
         guard !isMonitoring else { return }
@@ -52,20 +32,16 @@ class Connectivity {
         monitor?.start(queue: queue)
      
         monitor?.pathUpdateHandler = { [weak self] path in
-            self?.netStatusChangeHandler?()
             self?.isConnected = path.status == .satisfied
         }
      
         isMonitoring = true
-        didStartMonitoringHandler?()
     }
-    
     
     func stopMonitoring() {
         guard isMonitoring, let monitor = monitor else { return }
         monitor.cancel()
         self.monitor = nil
         isMonitoring = false
-        didStopMonitoringHandler?()
     }
 }

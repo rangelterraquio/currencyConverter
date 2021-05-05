@@ -8,9 +8,11 @@
 import UIKit
 
 class CCButton: UIButton {
+    
     private let colorBkg: UIColor
     private let colorBorder: UIColor
-    //MARK: Initializers
+    
+    //MARK: Init
     init(titleText: String, background color: UIColor = .white, borderColor: UIColor = .blue){
         colorBkg = color
         colorBorder = borderColor
@@ -27,7 +29,6 @@ class CCButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    /// Method for setup additional configuration
     private func setupAdditionalConfiguration() {
         titleLabel?.font = .systemFont(ofSize: 20)
         setTitleColor(.blue, for: .normal)

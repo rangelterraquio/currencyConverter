@@ -7,34 +7,17 @@
 
 import Foundation
 
-enum CurrencyServiceError: Error {
+struct CurrencyServiceError: Decodable {
     
-    case apiError
-    case invalidAmount
-    case invalidCurrencies
-    case connectioError
+    static let unkown = CurrencyServiceError(code: -1, description: "Something goes Wrong. Try Again!")
+    static let invalidCurrencies = CurrencyServiceError(code: -2, description: "Invalid currencies. Try Again!")
+    static let notConnected = CurrencyServiceError(code: -3, description: "Your device is not connected, reconnect and try Again!")
     
-    init(code: Int) {
-        switch code {
-        case 401,402:
-            self = .invalidCurrencies
-        case 403:
-            self = .invalidAmount
-        default:
-            self = .apiError
-        }
-    }
+    let code: Int
+    let description: String
     
-    var localizedDescription: String {
-        switch self {
-        case .apiError:
-            return "Something goes wrong on server. Try again!"
-        case .invalidAmount:
-            return "Invalid value. Try again!"
-        case .invalidCurrencies:
-            return "One of currencis is invalid. Try again!"
-        case .connectioError:
-            return "The device is not connected, reconnect and try again!"
-        }
-    }
+    private enum CodingKeys: String, CodingKey {
+        case code
+        case description = "info"
+    }    
 }
