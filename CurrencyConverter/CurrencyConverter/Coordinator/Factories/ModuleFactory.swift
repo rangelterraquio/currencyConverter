@@ -9,8 +9,8 @@ import Foundation
 
 final class ModuleFactory: HomeModuleFactory {
    
-    func makeSelectCurrencyHandler(selection source: SelectCurrencyViewController.CurrencySource) -> SelectCurrencyViewController {
-        let vc = SelectCurrencyViewController(currencySource: source)
+    func makeSelectCurrencyHandler(selection source: CurrencySource) -> SelectCurrencyViewController {
+        let vc = SelectCurrencyViewController(viewModel: SelectCurrencyViewModel(currencySource: source))
         return vc
     }
     

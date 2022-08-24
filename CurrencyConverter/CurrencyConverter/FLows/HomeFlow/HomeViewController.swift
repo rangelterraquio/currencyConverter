@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
 
     //MARK: - Views
     private let vStack: UIStackView = {
@@ -76,24 +76,12 @@ class HomeViewController: UIViewController {
     }()
     
     //MARK: - Properties
-    public var didTapSelectionCurrencyButton: ((SelectCurrencyViewController.CurrencySource) -> Void)?
+    public var didTapSelectionCurrencyButton: ((CurrencySource) -> Void)?
     
-    public let convertViewModel: HomeConvertViewModel
-    
-    private var fromCurrency: Currency? = Currency(code: "BRL", name: "Brazilian Real") {
-        didSet {
-            validateInputs()
-        }
-    }
-    
-    private var toCurrency: Currency? = Currency(code: "USD", name: "United States Dollar") {
-        didSet {
-            validateInputs()
-        }
-    }
+    public var convertViewModel: HomeConvertViewModelProtocol
     
     //MARK: - Init
-    init(viewModel: HomeConvertViewModel = HomeConvertViewModel()) {
+    init(viewModel: HomeConvertViewModelProtocol = HomeConvertViewModel()) {
         convertViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -120,18 +108,12 @@ class HomeViewController: UIViewController {
     
     @objc
     func didTapConvertButton() {
-        if let from = fromCurrency, let to = toCurrency {
-            errorLabel.isHidden = true
-            resultLabel.text = ""
-            activityIndicator.isHidden = false
-            activityIndicator.startAnimating()
-            let value = valueTextField.text ?? ""
-            convertViewModel.convert(from: from, to: to, value: Float(value) ?? 0.0)
-        }
-    }
-    
-    private func validateInputs() {
-        convertViewModel.validateInputs(from: fromCurrency, to: toCurrency, value: valueTextField.text)
+        errorLabel.isHidden = true
+        resultLabel.text = ""
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        let value = valueTextField.text ?? ""
+        convertViewModel.convert(value: Float(value) ?? 0.0)
     }
 }
 //MARK: - ViewCoding
@@ -192,10 +174,10 @@ extension HomeViewController: ViewCoding {
         valueTextField.delegate = self
         valueTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
-        fromCurrencyView.config(with: fromCurrency)
+        fromCurrencyView.config(with: convertViewModel.getFromCurrency())
         fromCurrencyView.button.addTarget(self, action: #selector(didTapSelectCurrencyButton(_:)), for: .touchUpInside)
        
-        toCurrencyView.config(with: toCurrency)
+        toCurrencyView.config(with: convertViewModel.getToCurrency())
         toCurrencyView.button.addTarget(self, action: #selector(didTapSelectCurrencyButton(_:)), for: .touchUpInside)
         
         convertButton.addTarget(self, action: #selector(didTapConvertButton), for: .touchUpInside)
@@ -228,13 +210,13 @@ extension HomeViewController: ViewCoding {
 //MARK: - SelectCurrencyDelegate
 extension HomeViewController: SelectCurrencyDelegate {
     
-    func didSelect(currency: Currency, source: SelectCurrencyViewController.CurrencySource) {
+    func didSelect(currency: Currency, source: CurrencySource) {
         
         if source == .to {
-            toCurrency = currency
+            convertViewModel.setToCurrency(currency)
             toCurrencyView.config(with: currency)
         } else {
-            fromCurrency = currency
+            convertViewModel.setFromCurrency(currency)
             fromCurrencyView.config(with: currency)
         }
     }
@@ -248,11 +230,11 @@ extension HomeViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        validateInputs()
+        convertViewModel.validateValueInput(value: textField.text)
     }
     
    @objc
     func textFieldDidChange(){
-        validateInputs()
+        convertViewModel.validateValueInput(value: valueTextField.text)
     }
 }

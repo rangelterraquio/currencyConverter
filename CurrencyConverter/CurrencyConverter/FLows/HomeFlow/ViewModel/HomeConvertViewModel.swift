@@ -7,7 +7,21 @@
 
 import Foundation
 
-class HomeConvertViewModel: NSObject {
+protocol HomeConvertViewModelProtocol {
+    var bindResultConversionModel: ((String)->Void)? { get set }
+    var bindValidatedInputs: ((Bool)->Void)? { get set }
+    var bindErrorState: ((String)->Void)? { get set }
+    
+    func convert(value: Float)
+    func validateCurrencyInputs(from: Currency?, to: Currency?, value: String?)
+    func setFromCurrency(_ fromCurrency: Currency?)
+    func setToCurrency(_ toCurrency: Currency?)
+    func getFromCurrency() -> Currency?
+    func getToCurrency() -> Currency?
+    func validateValueInput(value: String?)
+}
+
+final class HomeConvertViewModel: NSObject, HomeConvertViewModelProtocol {
     
     //MARK: - Properties
     private let currencyService: CurrencyService
@@ -22,13 +36,21 @@ class HomeConvertViewModel: NSObject {
    
     private var error: CurrencyServiceError?
     
+    private var fromCurrency: Currency? = Currency(code: "BRL", name: "Brazilian Real")
+    
+    private var toCurrency: Currency? = Currency(code: "USD", name: "United States Dollar")
+    
     //MARK: - Init
     init(service: CurrencyService = CurrencyService(), dataManager: DataManager = DataManager.shared) {
         self.currencyService = service
         self.dataManager = dataManager
     }
     
-    func convert(from: Currency, to: Currency, value: Float) {
+    func convert(value: Float) {
+        guard let from = fromCurrency, let to = toCurrency else {
+            bindErrorState?("Invalid selected currencies")
+            return
+        }
         
         guard Connectivity.shared.isConnected else {
             error = .notConnected
@@ -107,11 +129,35 @@ class HomeConvertViewModel: NSObject {
         return "\(value) \(fromCode) = \(String(format: "%.2f", conversion)) \(toCode)"
     }
     
-    func validateInputs(from: Currency?, to: Currency?, value: String?) {
-        if let _ = from, let _ = to, let _ = Float.init(value ?? "") {
+    func validateCurrencyInputs(from: Currency?, to: Currency?, value: String?) {
+        if let _ = from, let _ = to {
             bindValidatedInputs?(true)
             return
         }
         bindValidatedInputs?(false)
+    }
+    
+    func validateValueInput(value: String?) {
+        if let _ = Float.init(value ?? "") {
+            bindValidatedInputs?(true)
+            return
+        }
+        bindValidatedInputs?(false)
+    }
+    
+    func setFromCurrency(_ fromCurrency: Currency?) {
+        self.fromCurrency = fromCurrency
+    }
+    
+    func setToCurrency(_ toCurrency: Currency?) {
+        self.toCurrency = toCurrency
+    }
+    
+    func getFromCurrency() -> Currency? {
+        return fromCurrency
+    }
+    
+    func getToCurrency() -> Currency? {
+        return toCurrency
     }
 }

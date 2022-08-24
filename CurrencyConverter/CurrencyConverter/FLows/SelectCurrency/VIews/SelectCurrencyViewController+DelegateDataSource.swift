@@ -12,24 +12,27 @@ import UIKit
 extension SelectCurrencyViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return currencies.count
+        return selectCurrencyViewModel.getNumberOfCurrencies()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: SelectCurrencyTableViewCell.reuserIdentifier) as? SelectCurrencyTableViewCell {
-            cell.config(currency: currencies[indexPath.row])
+        if let cell = tableView.dequeueReusableCell(withIdentifier: SelectCurrencyTableViewCell.reuserIdentifier) as? SelectCurrencyTableViewCell,
+           let currency = selectCurrencyViewModel.getCurrency(at: indexPath.row) {
+            cell.config(currency: currency)
             return cell
         }
         return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCurrency = currencies[indexPath.row]
+//        selectedCurrency = currencies[indexPath.row]
+        selectCurrencyViewModel.didSelectCurrency(at: indexPath.row)
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if selectedCurrency ==  currencies[indexPath.row] {
-            selectedCurrency = nil
-        }
+        selectCurrencyViewModel.didDeselectCurrency(at: indexPath.row)
+//        if selectedCurrency ==  currencies[indexPath.row] {
+//            selectedCurrency = nil
+//        }
     }
 }

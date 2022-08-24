@@ -7,17 +7,42 @@
 
 import Foundation
 
-class SelectCurrencyViewModel: NSObject {
+public enum CurrencySource {
+    case from
+    case to
+}
+
+protocol SelectCurrencyViewModelProtocol {
+    var bindListAvaiableCurrencies: (([Currency]) -> Void)? { get set }
+    var bindLoadingState: (() -> Void)? { get set }
+    var bindErrorState: ((String)->Void)? { get set }
+    var bindConfirmButtonState: ((Bool) -> Void)? { get set }
+    
+    func getCurrencySource() -> CurrencySource
+    func getNumberOfCurrencies() -> Int
+    func getCurrency(at index: Int) -> Currency? 
+    func didSelectCurrency(at index: Int)
+    func didDeselectCurrency(at index: Int)
+    func getSelectedCurrency() -> Currency?
+    func list()
+    func filterList(by filter: SelectCurrencyFilter)
+    func search(for text: String?)
+}
+final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
     
     private let currencyService: CurrencyService
     
     public var bindListAvaiableCurrencies: (([Currency]) -> Void)?
     public var bindLoadingState: (() -> Void)?
     public var bindErrorState: ((String)->Void)?
+    public var bindConfirmButtonState: ((Bool) -> Void)?
     
     private let dataManager = DataManager.shared
     
     private var currencies: [Currency] = []
+    private var allCurrencies: [Currency] = []
+    private var selectedCurrency: Currency?
+    private let currencySource: CurrencySource
     
     private var selectedFilter: SelectCurrencyFilter = .none
 
@@ -31,8 +56,39 @@ class SelectCurrencyViewModel: NSObject {
         currencies.sorted { $0.currencyName ?? "" < $1.currencyName ?? "" }
     }
     
-    init(service: CurrencyService = CurrencyService()) {
-        currencyService = service
+    init(currencySource: CurrencySource,   service: CurrencyService = CurrencyService()) {
+        self.currencySource =  currencySource
+        self.currencyService = service
+    }
+    
+    func getCurrencySource() -> CurrencySource {
+        return currencySource
+    }
+    
+    func getNumberOfCurrencies() -> Int {
+        return currencies.count
+    }
+    
+    func getCurrency(at index: Int) -> Currency? {
+        guard index >= 0 && index < currencies.count else { return nil }
+        
+        return currencies[index]
+    }
+    
+    func didSelectCurrency(at index: Int) {
+        selectedCurrency = currencies[index]
+        bindConfirmButtonState?(true)
+    }
+    
+    func didDeselectCurrency(at index: Int) {
+        if selectedCurrency ==  currencies[index] {
+            selectedCurrency = nil
+            bindConfirmButtonState?(false)
+        }
+    }
+    
+    func getSelectedCurrency() -> Currency? {
+        return selectedCurrency
     }
     
     func list() {
@@ -60,10 +116,10 @@ class SelectCurrencyViewModel: NSObject {
                         self.handleOffilineList()
                         return
                     }
-                        self.bindListAvaiableCurrencies?(currencies)
                         self.currencies = currencies
-                        
-                        
+                        self.allCurrencies = currencies
+                        self.bindListAvaiableCurrencies?(currencies)
+
                         self.updateLocalDatabase(with: currencies)
                 case.error(_):
                     self.error = .unkown
@@ -83,25 +139,27 @@ class SelectCurrencyViewModel: NSObject {
     
     func filterList(by filter: SelectCurrencyFilter) {
         
-        guard selectedFilter != filter else { return}
+        guard selectedFilter != filter else { return }
         
         bindLoadingState?()
         
         switch filter {
         case .byCode:
-            bindListAvaiableCurrencies?(currenciesFilteredByCode)
+             currencies = currenciesFilteredByCode
         case .byName:
-            bindListAvaiableCurrencies?(currenciesFIlteredByName)
+             currencies = currenciesFIlteredByName
         case .none:
-            bindListAvaiableCurrencies?(currencies)
+            currencies = allCurrencies
         }
         
         selectedFilter = filter
+        bindListAvaiableCurrencies?(currencies)
     }
     
     
     func search(for text: String?) {
         guard let text = text, !text.isEmpty else {
+            self.currencies = allCurrencies
             self.bindListAvaiableCurrencies?(currencies)
             return
         }
@@ -112,15 +170,18 @@ class SelectCurrencyViewModel: NSObject {
         let predicateOr = NSCompoundPredicate(type: .or, subpredicates: [predicate1, predicate2])
         dataManager.fetch(entity: Currency.self, predicate: predicateOr) { (model, error) in
             if let _ = error {
+                self.currencies = []
                 self.bindListAvaiableCurrencies?([])
                 return
             }
             
-            guard let currencies = model else {
+            guard let currenciesFetched = model else {
+                self.currencies = []
                 self.bindListAvaiableCurrencies?([])
                 return
             }
-            self.bindListAvaiableCurrencies?(currencies)
+            self.currencies = currenciesFetched
+            self.bindListAvaiableCurrencies?(currenciesFetched)
         }
     }
     
@@ -137,7 +198,7 @@ class SelectCurrencyViewModel: NSObject {
                 self.bindErrorState?(CurrencyServiceError.unkown.description)
                 return
             }
-            
+            self.allCurrencies = currencies
             self.currencies = currencies
             self.bindListAvaiableCurrencies?(currencies)
         })

@@ -11,5 +11,5 @@ protocol HomeModuleFactory {
 
     func makeHomeHandler() -> HomeViewController
     
-    func makeSelectCurrencyHandler(selection source: SelectCurrencyViewController.CurrencySource) -> SelectCurrencyViewController
+    func makeSelectCurrencyHandler(selection source: CurrencySource) -> SelectCurrencyViewController
 }

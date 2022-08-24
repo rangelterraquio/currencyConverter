@@ -8,12 +8,7 @@
 import Foundation
 import UIKit
 
-class SelectCurrencyViewController: UIViewController {
-    
-    public enum CurrencySource {
-        case from
-        case to
-    }
+final class SelectCurrencyViewController: UIViewController {
     
     //MARK: - Views
     private lazy var searchBar: UISearchBar = {
@@ -64,24 +59,13 @@ class SelectCurrencyViewController: UIViewController {
     
     //MARK: - Properties
     public var didTapInConfirmButton: (() -> Void)?
-    
-    private let currencySource: CurrencySource
-    
+        
     weak var delegate: SelectCurrencyDelegate?
     
-    private let selectCurrencyViewModel: SelectCurrencyViewModel
-    
-    var currencies: [Currency] = []
-    
-    var selectedCurrency: Currency? {
-        didSet {
-            confirmButton.isUserInteractionEnabled = selectedCurrency != nil
-        }
-    }
+    var selectCurrencyViewModel: SelectCurrencyViewModelProtocol
     
     //MARK: - Init
-    init(viewModel: SelectCurrencyViewModel = SelectCurrencyViewModel(), currencySource: CurrencySource) {
-        self.currencySource = currencySource
+    init(viewModel: SelectCurrencyViewModelProtocol) {
         self.selectCurrencyViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -106,7 +90,11 @@ class SelectCurrencyViewController: UIViewController {
     
     @objc
     private func didTapConfirmButton() {
-        delegate?.didSelect(currency: selectedCurrency!, source: currencySource)
+        guard let selectedCurrency = selectCurrencyViewModel.getSelectedCurrency() else { return }
+        
+        let source = selectCurrencyViewModel.getCurrencySource()
+        delegate?.didSelect(currency: selectedCurrency, source: source)
+        
         didTapInConfirmButton?()
     }
     
@@ -184,7 +172,6 @@ extension SelectCurrencyViewController: ViewCoding {
                 self.tableView.isHidden = false
                 self.confirmButton.isHidden = false
                 self.activityIndicator.stopAnimating()
-                self.currencies = currencies
                 self.tableView.reloadData()
             }
         }
@@ -209,6 +196,10 @@ extension SelectCurrencyViewController: ViewCoding {
             }
         }
         
+        selectCurrencyViewModel.bindConfirmButtonState = { isEnabled in
+            self.confirmButton.isUserInteractionEnabled = isEnabled
+        }
+        
         confirmButton.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)
         
         navigationItem.setRightBarButton(filterButton, animated: true)
@@ -227,6 +218,7 @@ extension SelectCurrencyViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
         navigationItem.setRightBarButton(filterButton, animated: true)
         searchBar.showsCancelButton = false
+        tableView.reloadData()
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

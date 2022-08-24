@@ -36,7 +36,7 @@ final class HomeCoordinator: BaseCoordinator {
         homeHandler.navigationItem.backButtonTitle = ""
     }
     
-    private func showSelectionCurrencyView(source: SelectCurrencyViewController.CurrencySource) {
+    private func showSelectionCurrencyView(source: CurrencySource) {
         let vc = factory.makeSelectCurrencyHandler(selection: source)
         vc.delegate = homeHandler
         
