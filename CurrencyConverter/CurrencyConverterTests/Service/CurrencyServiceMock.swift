@@ -8,16 +8,17 @@
 import Foundation
 @testable import CurrencyConverter
 
-final class CurrencyServiceMock: CurrencyService {
+final class CurrencyServiceMock: CurrencyServiceProtocol {
+    var target: CurrencyTarget.Type = CurrencyTarget.self
+    
     
     var shouldReturnError: Bool
     
     init(shouldReturnError: Bool) {
         self.shouldReturnError = shouldReturnError
-        super.init()
     }
 
-    override func list(handle: @escaping CurrencyService.ServiceCompletion<CurrenciesResponseModel>) {
+    func list(handle: @escaping CurrencyService.ServiceCompletion<CurrenciesResponseModel>) {
         if shouldReturnError {
             let data = TestDataGenerator.getListCurrenciesDataWithError()
             handle(.success(try! data.decoded()))
@@ -27,7 +28,7 @@ final class CurrencyServiceMock: CurrencyService {
         handle(.success(try! data.decoded()))
     }
     
-    override func convert(handle: @escaping CurrencyService.ServiceCompletion<ConversionResponseModel>) {
+    func convert(handle: @escaping CurrencyService.ServiceCompletion<ConversionResponseModel>) {
         if shouldReturnError {
               let data = TestDataGenerator.getQuotesDataWithError()
             handle(.success(try! data.decoded()))

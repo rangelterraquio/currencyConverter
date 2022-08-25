@@ -8,7 +8,13 @@
 import Foundation
 import Network
 
-class Connectivity {
+protocol ConnectivityProtocol {
+    var isConnected: Bool { get }
+    
+    func startMonitoring()
+    func stopMonitoring()
+}
+class Connectivity: ConnectivityProtocol {
     
     static let shared = Connectivity()
  

@@ -24,7 +24,7 @@ protocol HomeConvertViewModelProtocol {
 final class HomeConvertViewModel: NSObject, HomeConvertViewModelProtocol {
     
     //MARK: - Properties
-    private let currencyService: CurrencyService
+    private let currencyService: CurrencyServiceProtocol
     
     public var bindResultConversionModel: ((String)->Void)?
     
@@ -32,8 +32,9 @@ final class HomeConvertViewModel: NSObject, HomeConvertViewModelProtocol {
     
     public var bindErrorState: ((String)->Void)?
     
-    private let dataManager: DataManager
-   
+    var dataManager: DataManagerProtocol
+    var connectivity: ConnectivityProtocol
+    
     private var error: CurrencyServiceError?
     
     private var fromCurrency: Currency? = Currency(code: "BRL", name: "Brazilian Real")
@@ -41,9 +42,12 @@ final class HomeConvertViewModel: NSObject, HomeConvertViewModelProtocol {
     private var toCurrency: Currency? = Currency(code: "USD", name: "United States Dollar")
     
     //MARK: - Init
-    init(service: CurrencyService = CurrencyService(), dataManager: DataManager = DataManager.shared) {
+    init(service: CurrencyServiceProtocol = CurrencyService(),
+         dataManager: DataManagerProtocol = DataManager(),
+         connectivity: ConnectivityProtocol = Connectivity.shared) {
         self.currencyService = service
         self.dataManager = dataManager
+        self.connectivity = connectivity
     }
     
     func convert(value: Float) {
@@ -52,7 +56,7 @@ final class HomeConvertViewModel: NSObject, HomeConvertViewModelProtocol {
             return
         }
         
-        guard Connectivity.shared.isConnected else {
+        guard connectivity.isConnected else {
             error = .notConnected
             handleConversionOffiline(value: value, from: from, to: to)
             return

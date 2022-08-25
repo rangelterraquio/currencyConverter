@@ -12,7 +12,7 @@ class Currency: NSManagedObject {
     
     convenience init(code: String?, name: String?) {
         
-        guard let entity = NSEntityDescription.entity(forEntityName: "Currency", in: DataManager.shared.context) else {  fatalError("Failed to decode Subject!")  }
+        guard let entity = NSEntityDescription.entity(forEntityName: "Currency", in: DataManager().context) else {  fatalError("Failed to decode Subject!")  }
 
         self.init(entity: entity, insertInto: nil)
         self.currencyCode = code

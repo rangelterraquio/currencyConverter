@@ -166,7 +166,7 @@ extension SelectCurrencyViewController: ViewCoding {
             
         view.backgroundColor = .white
         
-        selectCurrencyViewModel.bindListAvaiableCurrencies = { currencies in
+        selectCurrencyViewModel.bindListAvaiableCurrencies = {
             DispatchQueue.main.async {
                 self.errorLabel.isHidden = true
                 self.tableView.isHidden = false
@@ -197,7 +197,9 @@ extension SelectCurrencyViewController: ViewCoding {
         }
         
         selectCurrencyViewModel.bindConfirmButtonState = { isEnabled in
-            self.confirmButton.isUserInteractionEnabled = isEnabled
+            DispatchQueue.main.async {
+                self.confirmButton.isUserInteractionEnabled = isEnabled
+            }
         }
         
         confirmButton.addTarget(self, action: #selector(didTapConfirmButton), for: .touchUpInside)

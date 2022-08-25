@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7000530328B70CE60062F749 /* DataManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7000530228B70CE60062F749 /* DataManagerMock.swift */; };
+		7000530528B71A2D0062F749 /* ConnectivityMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7000530428B71A2D0062F749 /* ConnectivityMock.swift */; };
 		70335424263DA92F000C67D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335423263DA92F000C67D9 /* AppDelegate.swift */; };
 		70335426263DA92F000C67D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335425263DA92F000C67D9 /* SceneDelegate.swift */; };
 		70335428263DA92F000C67D9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70335427263DA92F000C67D9 /* HomeViewController.swift */; };
@@ -80,6 +82,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7000530228B70CE60062F749 /* DataManagerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerMock.swift; sourceTree = "<group>"; };
+		7000530428B71A2D0062F749 /* ConnectivityMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityMock.swift; sourceTree = "<group>"; };
 		70335420263DA92F000C67D9 /* CurrencyConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrencyConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70335423263DA92F000C67D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70335425263DA92F000C67D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -425,6 +429,8 @@
 			isa = PBXGroup;
 			children = (
 				70A064EB2641859800370E53 /* CurrencyServiceMock.swift */,
+				7000530228B70CE60062F749 /* DataManagerMock.swift */,
+				7000530428B71A2D0062F749 /* ConnectivityMock.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -636,11 +642,13 @@
 			files = (
 				70A0650626421AF800370E53 /* SelectCurrencyViewModelTest.swift in Sources */,
 				70A064F626418C2400370E53 /* HomeViewMock.swift in Sources */,
+				7000530528B71A2D0062F749 /* ConnectivityMock.swift in Sources */,
 				70A064E4264184CF00370E53 /* HomeViewModelTest.swift in Sources */,
 				70A065002641E0B000370E53 /* DataManagerTest.swift in Sources */,
 				70A064EC2641859800370E53 /* CurrencyServiceMock.swift in Sources */,
 				70A064F12641871400370E53 /* TestDataGenerator.swift in Sources */,
 				70A0650E26421B0F00370E53 /* SelectCurrencyViewMock.swift in Sources */,
+				7000530328B70CE60062F749 /* DataManagerMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

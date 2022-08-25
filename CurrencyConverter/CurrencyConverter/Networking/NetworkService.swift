@@ -13,7 +13,7 @@ enum NetworkResult<T> {
 }
 
 protocol NetworkService {
-    associatedtype Target: NetworkTarget
+    typealias Target = NetworkTarget
     typealias ServiceCompletion<T> = (NetworkResult<T>) -> Void
     
     func request<T: Decodable>(target: Target, then complete: @escaping ServiceCompletion<T>)

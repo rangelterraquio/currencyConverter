@@ -12,33 +12,28 @@ class SelectCurrencyViewModelTest: XCTestCase {
    
     var viewModel: SelectCurrencyViewModel!
     
-    override func setUp() {
-        DataManager.shared.delete(entityName: "Currency", completion: nil)
-        DataManager.shared.resetUpdateDates()
-    }
-    
     func testGetListCurrenciesSuccesseful() {
-        viewModel = SelectCurrencyViewModel(service: CurrencyServiceMock(shouldReturnError: false))
+        viewModel = SelectCurrencyViewModel(currencySource: .to, service: CurrencyServiceMock(shouldReturnError: false), connectivity: ConnectivityMock())
         
         let viewMock = SelectCurrencyViewMock(viewModel: viewModel)
         
         viewModel.list()
         
-        XCTAssertEqual(viewMock.resultAvaiableCurrencies.count, 5)
+        XCTAssertTrue(viewMock.resultAvaiableCurrenciesCalled)
     }
     
     func testGetListCurrenciesWtihError() {
-        viewModel = SelectCurrencyViewModel(service: CurrencyServiceMock(shouldReturnError: true))
+        viewModel = SelectCurrencyViewModel(currencySource: .to, service: CurrencyServiceMock(shouldReturnError: true), dataManager: DataManagerMock(needsUpdateCurrencies: true, needsUpdateQuotes: true, fetchWithError: true), connectivity: ConnectivityMock())
         
         let viewMock = SelectCurrencyViewMock(viewModel: viewModel)
         
         viewModel.list()
         
-        XCTAssertEqual(viewMock.resultErrorStateText, "Your monthly usage limit has been reached. Please upgrade your subscription plan.")
+        XCTAssertEqual(viewMock.resultErrorStateText, "Something goes Wrong. Try Again!")
     }
     
     func testLoadViewWasCalled() {
-        viewModel = SelectCurrencyViewModel(service: CurrencyServiceMock(shouldReturnError: false))
+        viewModel = SelectCurrencyViewModel(currencySource: .from, service: CurrencyServiceMock(shouldReturnError: false), connectivity: ConnectivityMock())
         
         let viewMock = SelectCurrencyViewMock(viewModel: viewModel)
         
@@ -48,10 +43,8 @@ class SelectCurrencyViewModelTest: XCTestCase {
     }
 
     func testFilterByCode() {
-        viewModel = SelectCurrencyViewModel(service: CurrencyServiceMock(shouldReturnError: false))
-        
-        let viewMock = SelectCurrencyViewMock(viewModel: viewModel)
-        
+        viewModel = SelectCurrencyViewModel(currencySource: .from, service: CurrencyServiceMock(shouldReturnError: false), dataManager: DataManagerMock(needsUpdateCurrencies: true, needsUpdateQuotes: true), connectivity: ConnectivityMock())
+                
         let orderedArray: [Currency] = [Currency(code: "AED", name: "United Arab Emirates Dirham"),
                                         Currency(code: "AFN", name: "Afghan Afghani"),
                                         Currency(code: "ALL", name: "Albanian Lek"),
@@ -60,17 +53,17 @@ class SelectCurrencyViewModelTest: XCTestCase {
         viewModel.list()
         viewModel.filterList(by: .byCode)
         
-        let isEqual = viewMock.resultAvaiableCurrencies.elementsEqual(orderedArray) {
-                $0.currencyCode == $1.currencyCode
+        var isEqual = true
+        for (i, currency) in orderedArray.enumerated() {
+            isEqual = currency.currencyName == (viewModel.getCurrency(at: i)?.currencyName ?? "")
         }
+        
         XCTAssertTrue(isEqual)
     }
     
     func testFilterByName() {
-        viewModel = SelectCurrencyViewModel(service: CurrencyServiceMock(shouldReturnError: false))
-        
-        let viewMock = SelectCurrencyViewMock(viewModel: viewModel)
-        
+        viewModel = SelectCurrencyViewModel(currencySource: .from, service: CurrencyServiceMock(shouldReturnError: false), dataManager: DataManagerMock(needsUpdateCurrencies: true, needsUpdateQuotes: true), connectivity: ConnectivityMock())
+                
         let orderedArray: [Currency] = [Currency(code: "AFN", name: "Afghan Afghani"),
                                         Currency(code: "ALL", name: "Albanian Lek"),
                                         Currency(code: "AMD", name: "Armenian Dram"),
@@ -79,8 +72,9 @@ class SelectCurrencyViewModelTest: XCTestCase {
         viewModel.list()
         viewModel.filterList(by: .byName)
         
-        let isEqual = viewMock.resultAvaiableCurrencies.elementsEqual(orderedArray) {
-                $0.currencyCode == $1.currencyCode
+        var isEqual = true
+        for (i, currency) in orderedArray.enumerated() {
+            isEqual = currency.currencyName == (viewModel.getCurrency(at: i)?.currencyName ?? "")
         }
         XCTAssertTrue(isEqual)
     }

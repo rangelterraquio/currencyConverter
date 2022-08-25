@@ -12,7 +12,7 @@ class SelectCurrencyViewMock {
     
     let viewModel: SelectCurrencyViewModel
     
-    var resultAvaiableCurrencies: [Currency] = []
+    var resultAvaiableCurrenciesCalled: Bool = false
     var resultErrorStateText: String = ""
     var isLoadStateCalled: Bool = false
     
@@ -22,8 +22,8 @@ class SelectCurrencyViewMock {
     }
     
     func setup() {
-        viewModel.bindListAvaiableCurrencies = { result in
-            self.resultAvaiableCurrencies = result
+        viewModel.bindListAvaiableCurrencies = {
+            self.resultAvaiableCurrenciesCalled = true
         }
         
         viewModel.bindErrorState = { error in

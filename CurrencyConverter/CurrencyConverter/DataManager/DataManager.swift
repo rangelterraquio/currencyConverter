@@ -8,7 +8,27 @@
 import Foundation
 import CoreData
 
-class DataManager {
+protocol DataManagerProtocol {
+    var needsUpdateCurrenciesListFromServer: Bool { get }
+    var needsUpdateQuotesFromServer: Bool { get }
+    
+    func hasUpdatedCurrenciesList()
+    func hasUpdatedQuotes(in date: TimeInterval)
+    func resetUpdateDates()
+    
+    ///Insert
+    func insert(with currencies: [Currency], completion: ((DataControllerError?) -> Void)?)
+    func insert(with quotes: [String: Float], completion: ((DataControllerError?) -> Void)?)
+    
+    ///Fetch
+    func fetch<T: NSManagedObject>(entity: T.Type, completion: (([T]?,DataControllerError?) -> Void)?)
+    func fetch<T: NSManagedObject>(entity: T.Type,predicate: NSPredicate, completion: (([T]?,DataControllerError?) -> Void)?)
+    
+    ///Delete
+    func delete(entityName: String, completion: ((DataControllerError?) -> Void)?)
+}
+
+class DataManager: DataManagerProtocol {
     
     private lazy var dataController: DataController = {
         DataController()
@@ -18,9 +38,7 @@ class DataManager {
         dataController.manageContext
     }
         
-    private init() {}
-    
-    static let shared = DataManager()
+    init() {}
     
     var needsUpdateCurrenciesListFromServer: Bool {
         if let lastUpdate = UserDefaults.lastCurrenciesListUpdate {
@@ -109,6 +127,7 @@ extension DataManager {
     
 }
 
+//MARK: Delete
 extension DataManager {
     
     func delete(entityName: String, completion: ((DataControllerError?) -> Void)?) {

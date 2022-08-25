@@ -8,19 +8,19 @@
 import Foundation
 
 protocol CurrencyServiceProtocol: NetworkService {
- 
+    var target: CurrencyTarget.Type { get }
     func convert(handle: @escaping ServiceCompletion<ConversionResponseModel>)
     func list(handle: @escaping ServiceCompletion<CurrenciesResponseModel>)
 }
 
 class CurrencyService: CurrencyServiceProtocol {
-    typealias Target = CurrencyTarget
+    var target: CurrencyTarget.Type = CurrencyTarget.self
     
     func convert(handle: @escaping ServiceCompletion<ConversionResponseModel>) {
-        request(target: .convert, then: handle)
+        request(target: target.convert, then: handle)
     }
     
     func list(handle: @escaping ServiceCompletion<CurrenciesResponseModel>) {
-        request(target: .list, then: handle)
+        request(target: target.list, then: handle)
     }
 }

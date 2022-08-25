@@ -13,7 +13,7 @@ public enum CurrencySource {
 }
 
 protocol SelectCurrencyViewModelProtocol {
-    var bindListAvaiableCurrencies: (([Currency]) -> Void)? { get set }
+    var bindListAvaiableCurrencies: (() -> Void)? { get set }
     var bindLoadingState: (() -> Void)? { get set }
     var bindErrorState: ((String)->Void)? { get set }
     var bindConfirmButtonState: ((Bool) -> Void)? { get set }
@@ -28,16 +28,18 @@ protocol SelectCurrencyViewModelProtocol {
     func filterList(by filter: SelectCurrencyFilter)
     func search(for text: String?)
 }
+
 final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
     
-    private let currencyService: CurrencyService
+    private let currencyService: CurrencyServiceProtocol
     
-    public var bindListAvaiableCurrencies: (([Currency]) -> Void)?
+    public var bindListAvaiableCurrencies: (() -> Void)?
     public var bindLoadingState: (() -> Void)?
     public var bindErrorState: ((String)->Void)?
     public var bindConfirmButtonState: ((Bool) -> Void)?
     
-    private let dataManager = DataManager.shared
+    var dataManager: DataManagerProtocol
+    var connectivity: ConnectivityProtocol
     
     private var currencies: [Currency] = []
     private var allCurrencies: [Currency] = []
@@ -56,9 +58,14 @@ final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
         currencies.sorted { $0.currencyName ?? "" < $1.currencyName ?? "" }
     }
     
-    init(currencySource: CurrencySource,   service: CurrencyService = CurrencyService()) {
+    init(currencySource: CurrencySource,
+         service: CurrencyServiceProtocol = CurrencyService(),
+         dataManager: DataManagerProtocol = DataManager(),
+         connectivity: ConnectivityProtocol = Connectivity.shared) {
         self.currencySource =  currencySource
         self.currencyService = service
+        self.dataManager = dataManager
+        self.connectivity = connectivity
     }
     
     func getCurrencySource() -> CurrencySource {
@@ -94,12 +101,11 @@ final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
     func list() {
         bindLoadingState?()
         
-        guard Connectivity.shared.isConnected else {
+        guard connectivity.isConnected else {
             error = .notConnected
             handleOffilineList()
             return
         }
-        
         
         guard dataManager.needsUpdateCurrenciesListFromServer else {
             handleOffilineList()
@@ -118,7 +124,7 @@ final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
                     }
                         self.currencies = currencies
                         self.allCurrencies = currencies
-                        self.bindListAvaiableCurrencies?(currencies)
+                        self.bindListAvaiableCurrencies?()
 
                         self.updateLocalDatabase(with: currencies)
                 case.error(_):
@@ -153,14 +159,14 @@ final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
         }
         
         selectedFilter = filter
-        bindListAvaiableCurrencies?(currencies)
+        bindListAvaiableCurrencies?()
     }
     
     
     func search(for text: String?) {
         guard let text = text, !text.isEmpty else {
             self.currencies = allCurrencies
-            self.bindListAvaiableCurrencies?(currencies)
+            self.bindListAvaiableCurrencies?()
             return
         }
         
@@ -171,17 +177,17 @@ final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
         dataManager.fetch(entity: Currency.self, predicate: predicateOr) { (model, error) in
             if let _ = error {
                 self.currencies = []
-                self.bindListAvaiableCurrencies?([])
+                self.bindListAvaiableCurrencies?()
                 return
             }
             
             guard let currenciesFetched = model else {
                 self.currencies = []
-                self.bindListAvaiableCurrencies?([])
+                self.bindListAvaiableCurrencies?()
                 return
             }
             self.currencies = currenciesFetched
-            self.bindListAvaiableCurrencies?(currenciesFetched)
+            self.bindListAvaiableCurrencies?()
         }
     }
     
@@ -200,7 +206,7 @@ final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
             }
             self.allCurrencies = currencies
             self.currencies = currencies
-            self.bindListAvaiableCurrencies?(currencies)
+            self.bindListAvaiableCurrencies?()
         })
     }
 }

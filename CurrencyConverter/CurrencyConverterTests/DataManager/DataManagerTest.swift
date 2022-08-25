@@ -14,13 +14,15 @@ final class DataManagerTest: XCTestCase {
     
     func testNeedsUpdateDataBaseFromServerEqualsTrue() {
         let yesterdayDate = Calendar.current.date(byAdding: .hour, value: -24, to: Date())
-        DataManager.shared.hasUpdatedQuotes(in: yesterdayDate!.timeIntervalSince1970)
-        XCTAssertTrue(DataManager.shared.needsUpdateQuotesFromServer)
+        let manager = DataManager()
+        manager.hasUpdatedQuotes(in: yesterdayDate?.timeIntervalSince1970 ?? Date().timeIntervalSince1970)
+        XCTAssertTrue(manager.needsUpdateQuotesFromServer)
     }
     
     func testNeedsUpdateDataBaseFromServerEqualsFalse() {
         let date = Date()
-        DataManager.shared.hasUpdatedQuotes(in: date.timeIntervalSince1970)
-        XCTAssertFalse(DataManager.shared.needsUpdateQuotesFromServer)
+        let manager = DataManager()
+        manager.hasUpdatedQuotes(in: date.timeIntervalSince1970)
+        XCTAssertFalse(manager.needsUpdateQuotesFromServer)
     }
 }
