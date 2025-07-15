@@ -7,7 +7,6 @@
 
 import Foundation
 
-// MARK: - Conversion State
 enum ConversionState {
     case idle
     case loading
@@ -15,7 +14,6 @@ enum ConversionState {
     case error(message: String)
 }
 
-// MARK: - ConversionStateManager Protocol
 protocol ConversionStateManagerProtocol {
     var onStateChange: ((ConversionState) -> Void)? { get set }
     var currentState: ConversionState { get }
@@ -27,10 +25,8 @@ protocol ConversionStateManagerProtocol {
     func setError(message: String)
 }
 
-// MARK: - ConversionStateManager Implementation
 final class ConversionStateManager: ConversionStateManagerProtocol {
     
-    // MARK: - Properties
     var onStateChange: ((ConversionState) -> Void)?
     
     private(set) var currentState: ConversionState = .idle {
@@ -42,7 +38,6 @@ final class ConversionStateManager: ConversionStateManagerProtocol {
         }
     }
     
-    // MARK: - Public Methods
     func setState(_ state: ConversionState) {
         currentState = state
     }
@@ -63,7 +58,6 @@ final class ConversionStateManager: ConversionStateManagerProtocol {
         currentState = .error(message: message)
     }
     
-    // MARK: - Computed Properties
     var isLoading: Bool {
         switch currentState {
         case .loading:

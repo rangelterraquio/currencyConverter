@@ -7,13 +7,11 @@
 
 import Foundation
 
-// MARK: - CurrencyConverter Protocol
 protocol CurrencyConverterProtocol {
     func convert(value: Float, from: Currency, to: Currency, quotes: [String: Float]) -> CurrencyConversionResult
     func formatConversionResult(_ result: CurrencyConversionResult) -> String
 }
 
-// MARK: - Currency Conversion Result
 struct CurrencyConversionResult {
     let originalValue: Float
     let convertedValue: Float
@@ -22,7 +20,10 @@ struct CurrencyConversionResult {
     let success: Bool
     let errorMessage: String?
     
-    static func success(originalValue: Float, convertedValue: Float, from: Currency, to: Currency) -> CurrencyConversionResult {
+    static func success(originalValue: Float,
+                        convertedValue: Float,
+                        from: Currency,
+                        to: Currency) -> CurrencyConversionResult {
         return CurrencyConversionResult(
             originalValue: originalValue,
             convertedValue: convertedValue,
@@ -33,7 +34,10 @@ struct CurrencyConversionResult {
         )
     }
     
-    static func failure(originalValue: Float, from: Currency, to: Currency, error: String) -> CurrencyConversionResult {
+    static func failure(originalValue: Float,
+                        from: Currency,
+                        to: Currency,
+                        error: String) -> CurrencyConversionResult {
         return CurrencyConversionResult(
             originalValue: originalValue,
             convertedValue: 0,
@@ -45,10 +49,8 @@ struct CurrencyConversionResult {
     }
 }
 
-// MARK: - CurrencyConverter Implementation
 final class CurrencyConverter: CurrencyConverterProtocol {
     
-    // MARK: - Properties
     private let decimalPlaces: Int
     
     // MARK: - Initialization
@@ -56,8 +58,10 @@ final class CurrencyConverter: CurrencyConverterProtocol {
         self.decimalPlaces = decimalPlaces
     }
     
-    // MARK: - Public Methods
-    func convert(value: Float, from: Currency, to: Currency, quotes: [String: Float]) -> CurrencyConversionResult {
+    func convert(value: Float,
+                 from: Currency,
+                 to: Currency,
+                 quotes: [String: Float]) -> CurrencyConversionResult {
         // Validate input parameters
         guard let fromCode = from.currencyCode, let toCode = to.currencyCode else {
             return CurrencyConversionResult.failure(
@@ -104,9 +108,10 @@ final class CurrencyConverter: CurrencyConverterProtocol {
                      toCode)
     }
     
-    // MARK: - Private Methods
-    private func performConversion(value: Float, fromCode: String, toCode: String, quotes: [String: Float]) -> CurrencyConversionResult {
-        
+    private func performConversion(value: Float,
+                                   fromCode: String,
+                                   toCode: String,
+                                   quotes: [String: Float]) -> CurrencyConversionResult {
         // Get the USD rate for the 'from' currency
         let fromUSDKey = "USD\(fromCode)"
         let toUSDKey = "USD\(toCode)"
