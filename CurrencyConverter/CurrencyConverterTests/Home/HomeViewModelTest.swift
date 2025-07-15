@@ -13,33 +13,47 @@ class HomeViewModelTest: XCTestCase {
     var viewModel: HomeConvertViewModel!
     
     func testConversionWithSuccess() {
+        let expectation = XCTestExpectation(description: "Currency conversion completes successfully")
         
-        viewModel = HomeConvertViewModel(service:  CurrencyServiceMock(shouldReturnError: false), connectivity: ConnectivityMock())
+        viewModel = HomeConvertViewModel(service: CurrencyServiceMock(shouldReturnError: false), connectivity: ConnectivityMock())
         
         let viewMock = HomeViewMock(viewModel: viewModel)
+        
+        viewModel.bindResultConversionModel = { result in
+            viewMock.resultConvertText = result
+            expectation.fulfill()
+        }
+        
         viewModel.setFromCurrency(Currency(code: "AUD", name: "AUD"))
         viewModel.setToCurrency(Currency(code: "AWG", name: "AWG"))
         viewModel.convert(value: 50)
         
-        let result = "50.0 AUD = 70.62 AWG"
+        wait(for: [expectation], timeout: 3.0)
         
-        XCTAssertEqual(viewMock.resultConvertText, result)
-
+        let expectedResult = "50.00 AUD = 70.62 AWG"
+        XCTAssertEqual(viewMock.resultConvertText, expectedResult)
     }
     
     func testConversionWithError() {
+        let expectation = XCTestExpectation(description: "Currency conversion fails with error")
+        
         viewModel = HomeConvertViewModel(service: CurrencyServiceMock(shouldReturnError: true), dataManager: DataManagerMock(needsUpdateCurrencies: true, needsUpdateQuotes: true, fetchWithError: true), connectivity: ConnectivityMock())
         
         let viewMock = HomeViewMock(viewModel: viewModel)
         
+        viewModel.bindErrorState = { error in
+            viewMock.resultErrorStateText = error
+            expectation.fulfill()
+        }
+        
         viewModel.setFromCurrency(Currency(code: "AUD", name: "AUD"))
         viewModel.setToCurrency(Currency(code: "AWG", name: "AWG"))
         viewModel.convert(value: 50)
         
-        let result = CurrencyServiceError(code: 201, description: "Something goes Wrong. Try Again!")
+        wait(for: [expectation], timeout: 3.0)
         
-        XCTAssertEqual(viewMock.resultErrorStateText, result.description)
-
+        let expectedError = "Failed to fetch Data"
+        XCTAssertEqual(viewMock.resultErrorStateText, expectedError)
     }
     
     func testConversionWithInvalidInputs() {
@@ -52,6 +66,5 @@ class HomeViewModelTest: XCTestCase {
         viewModel.convert(value: 50)
                 
         XCTAssertFalse(viewMock.resultIsValidInputs)
-
     }
 }

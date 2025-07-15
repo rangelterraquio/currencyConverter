@@ -9,8 +9,6 @@ import Foundation
 @testable import CurrencyConverter
 
 final class CurrencyServiceMock: CurrencyServiceProtocol {
-    var target: CurrencyTarget.Type = CurrencyTarget.self
-    
     
     var shouldReturnError: Bool
     
@@ -18,24 +16,36 @@ final class CurrencyServiceMock: CurrencyServiceProtocol {
         self.shouldReturnError = shouldReturnError
     }
 
-    func list(handle: @escaping CurrencyService.ServiceCompletion<CurrenciesResponseModel>) {
+    func fetchList(completion: @escaping Completion<CurrenciesResponseModel>) {
         if shouldReturnError {
-            let data = TestDataGenerator.getListCurrenciesDataWithError()
-            handle(.success(try! data.decoded()))
+            let error = CurrencyConversionError.networkFailure
+            completion(.failure(error))
             return
         }
-        let data = TestDataGenerator.getListCurrenciesData()
-        handle(.success(try! data.decoded()))
+        
+        do {
+            let data = TestDataGenerator.getListCurrenciesData()
+            let result = try data.decoded() as CurrenciesResponseModel
+            completion(.success(result))
+        } catch {
+            completion(.failure(CurrencyConversionError.networkFailure))
+        }
     }
     
-    func convert(handle: @escaping CurrencyService.ServiceCompletion<ConversionResponseModel>) {
+    func convert(amount: Float, from: String, to: String, completion: @escaping Completion<ConversionResponseModel>) {
         if shouldReturnError {
-              let data = TestDataGenerator.getQuotesDataWithError()
-            handle(.success(try! data.decoded()))
+            let error = CurrencyConversionError.networkFailure
+            completion(.failure(error))
             return
         }
-        let data = TestDataGenerator.getQuotesData()
-        handle(.success(try! data.decoded()))
+        
+        do {
+            let data = TestDataGenerator.getQuotesData()
+            let result = try data.decoded() as ConversionResponseModel
+            completion(.success(result))
+        } catch {
+            completion(.failure(CurrencyConversionError.networkFailure))
+        }
     }
 }
 

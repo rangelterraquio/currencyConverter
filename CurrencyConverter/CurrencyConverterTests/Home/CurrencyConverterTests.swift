@@ -156,7 +156,7 @@ class CurrencyConverterTests: XCTestCase {
     func testDecimalRounding() {
         // Given
         let value: Float = 100.0
-        let quotes = ["USDUSD": 1.0, "USDEUR": 0.857142857] // Should round to 2 decimal places
+        let quotes: [String : Float] = ["USDUSD": 1.0, "USDEUR": 0.857142857] // Should round to 2 decimal places
         
         // When
         let result = currencyConverter.convert(
