@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CurrencyServiceError: Decodable {
+struct CurrencyServiceError: Decodable, Equatable {
     
     static let unkown = CurrencyServiceError(code: -1, description: "Something goes Wrong. Try Again!")
     static let invalidCurrencies = CurrencyServiceError(code: -2, description: "Invalid currencies. Try Again!")
@@ -19,5 +19,9 @@ struct CurrencyServiceError: Decodable {
     private enum CodingKeys: String, CodingKey {
         case code
         case description = "info"
-    }    
+    }
+    
+    static func == (lhs: CurrencyServiceError, rhs: CurrencyServiceError) -> Bool {
+        lhs.code == rhs.code
+    }
 }

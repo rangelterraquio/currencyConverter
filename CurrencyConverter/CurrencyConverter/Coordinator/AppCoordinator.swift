@@ -7,11 +7,11 @@
 
 import Foundation
 
-fileprivate enum InitializeInstructor{
+fileprivate enum InitializeInstructor {
     case home
 }
 
-final class AppCoordinator: BaseCoordinator{
+final class AppCoordinator: BaseCoordinator {
     
     //MARK: -> Properties
     private let router: Router

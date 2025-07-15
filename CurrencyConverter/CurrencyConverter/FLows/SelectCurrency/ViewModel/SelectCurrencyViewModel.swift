@@ -59,7 +59,7 @@ final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
     }
     
     init(currencySource: CurrencySource,
-         service: CurrencyServiceProtocol = CurrencyService(),
+         service: CurrencyServiceProtocol = CurrencyService.create(),
          dataManager: DataManagerProtocol = DataManager(),
          connectivity: ConnectivityProtocol = Connectivity.shared) {
         self.currencySource =  currencySource
@@ -112,13 +112,13 @@ final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
             return
         }
         
-        currencyService.list { [weak self] (response) in
+        currencyService.fetchList { [weak self] (response) in
             guard let self = self else { return }
             
             switch response {
-                case .success(let modelResult):
-                    guard let model = modelResult, model.success, let currencies = model.currencies else {
-                        self.error = modelResult?.error
+                case .success(let model):
+                    guard model.success, let currencies = model.currencies else {
+                        self.error = model.error
                         self.handleOffilineList()
                         return
                     }
@@ -127,7 +127,7 @@ final class SelectCurrencyViewModel: NSObject, SelectCurrencyViewModelProtocol {
                         self.bindListAvaiableCurrencies?()
 
                         self.updateLocalDatabase(with: currencies)
-                case.error(_):
+                case.failure(_):
                     self.error = .unkown
                     self.handleOffilineList()
             }

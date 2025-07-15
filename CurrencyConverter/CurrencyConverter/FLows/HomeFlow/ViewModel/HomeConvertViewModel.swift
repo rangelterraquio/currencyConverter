@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol HomeConvertViewModelProtocol {
+protocol HomeConvertViewModelProtocol: AnyObject {
     var bindResultConversionModel: ((String)->Void)? { get set }
     var bindValidatedInputs: ((Bool)->Void)? { get set }
     var bindErrorState: ((String)->Void)? { get set }
@@ -23,130 +23,85 @@ protocol HomeConvertViewModelProtocol {
 
 final class HomeConvertViewModel: NSObject, HomeConvertViewModelProtocol {
     
-    //MARK: - Properties
     private let currencyService: CurrencyServiceProtocol
+    private let dataManager: DataManagerProtocol
+    private let connectivity: ConnectivityProtocol
+    private let currencyConverter: CurrencyConverterProtocol
+    private let inputValidator: InputValidatorProtocol
+    private var stateManager: ConversionStateManagerProtocol
+    private let errorHandler: AppErrorHandlerProtocol
     
+    // MARK: - Bindings
     public var bindResultConversionModel: ((String)->Void)?
-    
     public var bindValidatedInputs: ((Bool)->Void)?
-    
     public var bindErrorState: ((String)->Void)?
     
-    var dataManager: DataManagerProtocol
-    var connectivity: ConnectivityProtocol
+    // MARK: - State
+    private var fromCurrency: Currency?
+    private var toCurrency: Currency?
     
-    private var error: CurrencyServiceError?
-    
-    private var fromCurrency: Currency? = Currency(code: "BRL", name: "Brazilian Real")
-    
-    private var toCurrency: Currency? = Currency(code: "USD", name: "United States Dollar")
-    
-    //MARK: - Init
-    init(service: CurrencyServiceProtocol = CurrencyService(),
+    init(service: CurrencyServiceProtocol = CurrencyService.create(),
          dataManager: DataManagerProtocol = DataManager(),
-         connectivity: ConnectivityProtocol = Connectivity.shared) {
+         connectivity: ConnectivityProtocol = Connectivity.shared,
+         currencyConverter: CurrencyConverterProtocol = CurrencyConverter(),
+         inputValidator: InputValidatorProtocol = InputValidator(),
+         stateManager: ConversionStateManagerProtocol = ConversionStateManager(),
+         errorHandler: AppErrorHandlerProtocol = AppErrorHandler.shared) {
+        
         self.currencyService = service
         self.dataManager = dataManager
         self.connectivity = connectivity
+        self.currencyConverter = currencyConverter
+        self.inputValidator = inputValidator
+        self.stateManager = stateManager
+        self.errorHandler = errorHandler
+        
+        super.init()
+        
+        setupDefaultCurrencies()
+        setupStateObservation()
     }
     
     func convert(value: Float) {
-        guard let from = fromCurrency, let to = toCurrency else {
-            bindErrorState?("Invalid selected currencies")
+        let validationResult = inputValidator.validateConversionInputs(
+            value: String(value),
+            from: fromCurrency,
+            to: toCurrency
+        )
+        
+        if !validationResult.isValid {
+            handleValidationError(validationResult)
             return
         }
         
-        guard connectivity.isConnected else {
-            error = .notConnected
-            handleConversionOffiline(value: value, from: from, to: to)
-            return
-        }
-        /*
-         As the free version of the APP only updates the values daily
-         for a better use of the API it just get data from the server once a day.
-         */
-        guard dataManager.needsUpdateQuotesFromServer else {
-            handleConversionOffiline(value: value, from: from, to: to)
+        guard let fromCurrency = fromCurrency, let toCurrency = toCurrency else {
+            handleConversionError(CurrencyConversionError.invalidCurrency)
             return
         }
         
-        currencyService.convert() { [weak self] (result) in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let modelResult):
-                guard let model = modelResult, model.success, let quotes = model.quotes else {
-                    self.error = modelResult?.error
-                    self.handleConversionOffiline(value: value, from: from, to: to)
-                    return
-                }
-                
-                let text = self.convertAndFormatText(value: value, from: from, to: to, quotes: quotes)
-                self.bindResultConversionModel?(text)
-                self.updateLocalDatabase(with: quotes, date: model.timestamp ?? Date().timeIntervalSinceNow)
-            case .error(_):
-                self.error = .unkown
-                self.handleConversionOffiline(value: value, from: from, to: to)
-                break
-            }
-        }
-    }
-    
-    private func updateLocalDatabase(with quotes: [String : Float], date: TimeInterval) {
-        dataManager.insert(with: quotes) { [weak self] (error) in
-            
-            guard error == nil else { return }
-            
-            self?.dataManager.hasUpdatedQuotes(in: date)
-        }
-    }
-    
-    private func handleConversionOffiline(value: Float, from: Currency, to: Currency) {
-        dataManager.fetch(entity: Quotes.self) { [weak self] (model, error) in
-            guard let self = self else { return }
-            
-            if let _ = error, let serviceError = self.error {
-                self.bindErrorState?(serviceError.description)
-                return
-            }
-            
-            guard let model = model?.first, let quotes: [String: Float] = try? model.quotes?.decoded() else {
-                self.bindErrorState?(CurrencyServiceError.unkown.description)
-                return
-            }
-            
-            let text = self.convertAndFormatText(value: value, from: from, to: to, quotes: quotes)
-            self.bindResultConversionModel?(text)
-        }
-    }
-    
-    private func convertAndFormatText(value: Float, from: Currency, to: Currency, quotes: [String : Float]) -> String {
+        // Start conversion process
+        stateManager.startLoading()
         
-        guard let fromCode = from.currencyCode, let toCode = to.currencyCode else {
-            bindErrorState?(CurrencyServiceError.invalidCurrencies.description)
-            return ""
+        if connectivity.isConnected && dataManager.needsUpdateQuotesFromServer {
+            performOnlineConversion(value: value, from: fromCurrency, to: toCurrency)
+        } else {
+            performOfflineConversion(value: value, from: fromCurrency, to: toCurrency)
         }
-        let amountInDolar = (quotes["USD\(fromCode)"] ?? 1) / value
-        
-        let conversion = (quotes["USD\(toCode)"] ?? 1) / amountInDolar
-        
-        return "\(value) \(fromCode) = \(String(format: "%.2f", conversion)) \(toCode)"
     }
     
     func validateCurrencyInputs(from: Currency?, to: Currency?, value: String?) {
-        if let _ = from, let _ = to {
-            bindValidatedInputs?(true)
-            return
-        }
-        bindValidatedInputs?(false)
+        let validationResult = inputValidator.validateConversionInputs(
+            value: value,
+            from: from,
+            to: to
+        )
+        
+        bindValidatedInputs?(validationResult.isValid)
     }
     
     func validateValueInput(value: String?) {
-        if let _ = Float.init(value ?? "") {
-            bindValidatedInputs?(true)
-            return
-        }
-        bindValidatedInputs?(false)
+        let validationResult = inputValidator.validateValue(value)
+        bindValidatedInputs?(validationResult.isValid)
     }
     
     func setFromCurrency(_ fromCurrency: Currency?) {
@@ -163,5 +118,119 @@ final class HomeConvertViewModel: NSObject, HomeConvertViewModelProtocol {
     
     func getToCurrency() -> Currency? {
         return toCurrency
+    }
+    
+    private func setupDefaultCurrencies() {
+        let defaultFrom = HomeConstants.DefaultCurrencies.from
+        let defaultTo = HomeConstants.DefaultCurrencies.to
+        
+        fromCurrency = Currency(code: defaultFrom.code, name: defaultFrom.name)
+        toCurrency = Currency(code: defaultTo.code, name: defaultTo.name)
+    }
+    
+    private func setupStateObservation() {
+        stateManager.onStateChange = { [weak self] state in
+            self?.handleStateChange(state)
+        }
+    }
+    
+    private func handleStateChange(_ state: ConversionState) {
+        switch state {
+        case .idle:
+            break
+        case .loading:
+            break
+        case .success(let result):
+            let formattedResult = currencyConverter.formatConversionResult(result)
+            bindResultConversionModel?(formattedResult)
+        case .error(let message):
+            bindErrorState?(message)
+        }
+    }
+    
+    private func performOnlineConversion(value: Float, from: Currency, to: Currency) {
+        currencyService.convert(amount: value,
+                                from: from.currencyCode ?? "",
+                                to: to.currencyCode ?? "") { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let modelResult):
+                self.handleNetworkSuccess(modelResult, value: value, from: from, to: to)
+            case .failure(let error):
+                self.handleNetworkError(error, value: value, from: from, to: to)
+            }
+        }
+    }
+    
+    private func handleNetworkSuccess(_ modelResult: ConversionResponseModel?, value: Float, from: Currency, to: Currency) {
+        guard let model = modelResult, model.success, let quotes = model.quotes else {
+            performOfflineConversion(value: value, from: from, to: to)
+            return
+        }
+        
+        // Perform conversion
+        let conversionResult = currencyConverter.convert(value: value, from: from, to: to, quotes: quotes)
+        
+        if conversionResult.success {
+            stateManager.setSuccess(result: conversionResult)
+            updateLocalDatabase(with: quotes, date: model.timestamp ?? Date().timeIntervalSince1970)
+        } else {
+            let error = CurrencyConversionError.custom(message: conversionResult.errorMessage ?? "Unknown error")
+            handleConversionError(error)
+        }
+    }
+    
+    private func handleNetworkError(_ error: (any Error)?, value: Float, from: Currency, to: Currency) {
+        if let error = error {
+            errorHandler.handle(error, context: "Online conversion failed")
+        }
+        
+        // Fallback to offline conversion
+        performOfflineConversion(value: value, from: from, to: to)
+    }
+    
+    private func performOfflineConversion(value: Float, from: Currency, to: Currency) {
+        dataManager.fetch(entity: Quotes.self) { [weak self] (model, error) in
+            guard let self = self else { return }
+            
+            if let _ = error {
+                self.handleConversionError(CurrencyConversionError.custom(message: "Failed to fetch Data"))
+                return
+            }
+            
+            guard let model = model?.first, let quotes: [String: Float] = try? model.quotes?.decoded() else {
+                self.handleConversionError(CurrencyConversionError.custom(message: "Failed to fetch Data"))
+                return
+            }
+            
+            let conversionResult = self.currencyConverter.convert(value: value, from: from, to: to, quotes: quotes)
+            
+            if conversionResult.success {
+                self.stateManager.setSuccess(result: conversionResult)
+            } else {
+                let error = CurrencyConversionError.custom(message: conversionResult.errorMessage ?? "Unknown error")
+                self.handleConversionError(error)
+            }
+        }
+    }
+    
+    private func updateLocalDatabase(with quotes: [String: Float], date: TimeInterval) {
+        dataManager.insert(with: quotes) { [weak self] error in
+            if let error = error {
+                self?.errorHandler.handle(error, context: "Failed to update local database")
+            } else {
+                self?.dataManager.hasUpdatedQuotes(in: date)
+            }
+        }
+    }
+    
+    private func handleValidationError(_ validationResult: ValidationResult) {
+        errorHandler.handle(validationResult.errorMessage ?? "", context: "Validate conversion input")
+    }
+    
+    private func handleConversionError(_ error: AppError) {
+        errorHandler.handle(error, context: "Currency conversion")
+        stateManager.setError(message: error.message)
     }
 }

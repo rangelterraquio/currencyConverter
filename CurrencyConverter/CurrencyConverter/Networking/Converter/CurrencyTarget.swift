@@ -8,11 +8,12 @@
 import Foundation
 
 enum CurrencyTarget {
-    case convert
     case list
+    case convert(from: String, to: String, amount: Float)
 }
 
 extension CurrencyTarget: NetworkTarget {
+    
     var path: String {
         switch self {
         case .convert:
@@ -22,23 +23,43 @@ extension CurrencyTarget: NetworkTarget {
         }
     }
     
-    var method: Method {
+    var method: HTTPMethod {
         switch self {
-        case .convert:
-            return .post
-        case .list:
+        case .convert, .list:
             return .get
         }
     }
     
-    var header: [String : String]? {
-        var hearder: [String: String] = [:]
-        hearder["access_key"] = NetworkConstants.api_key
+    var headers: [String: String]? {
+        return [
+            "Content-Type" : "application/json"
+        ]
+    }
+    
+    var queryParameters: [String: String]? {
+        var parameters: [String: String] = ["access_key": NetworkConfiguration.default.apiKey]
+        
         switch self {
-        case .convert:
-            return hearder
         case .list:
-            return hearder
+            break
+            
+        case .convert(let from, let to, let amount):
+            parameters["from"] = from
+            parameters["to"] = to
+            parameters["amount"] = String(amount)
         }
+        
+        return parameters
+    }
+}
+
+// MARK: - Convenience Factory Methods
+extension CurrencyTarget {
+    static func convert(amount: Float, from: String, to: String) -> CurrencyTarget {
+        return .convert(from: from, to: to, amount: amount)
+    }
+    
+    static func list() -> CurrencyTarget {
+        return .list
     }
 }
